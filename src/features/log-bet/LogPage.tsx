@@ -1,4 +1,5 @@
 import { useBetsContext } from '../../shared/bets/useBetsContext'
+import { cardClass } from '../../shared/styles'
 import { useAuth } from '../auth/useAuth'
 import { BetForm } from './BetForm'
 import { BetHistory } from './BetHistory'
@@ -24,8 +25,10 @@ export function LogPage() {
   }
 
   return (
-    <div>
-      <BetForm userId={userId} sportLeagues={sportLeagues} onSubmit={handleSubmit} />
+    <div className="mx-auto flex max-w-2xl flex-col gap-4 p-4 pb-8 sm:p-6">
+      <div className={cardClass}>
+        <BetForm userId={userId} sportLeagues={sportLeagues} onSubmit={handleSubmit} />
+      </div>
       <BetHistory
         userId={userId}
         bets={bets}

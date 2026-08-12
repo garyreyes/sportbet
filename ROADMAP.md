@@ -85,8 +85,25 @@ item below.
       helpers (decisive/settled), time-range config, and streak calc all
       moved to `shared/` since this is the first feature to need them
       outside Log.
-- [ ] **3b. Profit chart** — not started. Cumulative / Per Bet / Daily
-      switchable views.
+- [x] **3b. Profit chart** — done. Cumulative (line) / Per Bet (bar,
+      status-colored) / Daily (bar, diverging around zero) views, built
+      with Recharts (new dependency, chosen over hand-rolled SVG). Shares
+      the dashboard's active time-range filter. Followed the `dataviz`
+      skill's procedure for form/color/mark choices.
+- [x] **Shared UI depth pass** — done, ahead of the formal Phase 3
+      Impeccable checkpoint. User feedback mid-build: the built screens
+      (Log, Dashboard, Auth) felt "skeletal" — flat borders, no surface
+      layering, zero hover/focus feedback. Added `shared/styles.ts`
+      (card/button/input/focus tokens) and applied it across every
+      shared component and both features' screens: real offset+blur
+      shadows, a card surface color distinct from the page background,
+      hover/active states on every button (previously had none), and
+      themed focus rings (also closes two accessibility gaps flagged in
+      the Phase 2 critique: missing focus indicators and unlabeled
+      Sport/League/Pick fields, fixed in the same pass since `BetForm`
+      was already being touched). Deliberately scoped to structure, not
+      new colors — Phase 7b's real theming re-skins this, doesn't
+      replace it.
 - [ ] **Impeccable critique + polish (Phase 3)** — not started. Run once
       3a/3b are both done — review Metrics + chart together.
 

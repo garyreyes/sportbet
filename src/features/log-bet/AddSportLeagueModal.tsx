@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { dangerButtonClass, focusRing, inputClass, primaryButtonClass } from '../../shared/styles'
 import {
   createCustomSportLeague,
   deleteCustomSportLeague,
@@ -65,20 +66,30 @@ export function AddSportLeagueModal({
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4">
-      <div className="w-full max-w-sm rounded-md bg-slate-900 p-4">
-        <div className="mb-3 flex items-center justify-between">
-          <h2 className="text-sm font-medium">Add Sport/League</h2>
-          <button type="button" onClick={onClose} className="text-slate-400">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4"
+      onClick={onClose}
+    >
+      <div
+        className="w-full max-w-sm rounded-xl border border-slate-800 bg-slate-900 p-5 shadow-2xl shadow-black/50"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="mb-4 flex items-center justify-between">
+          <h2 className="text-sm font-semibold">Add Sport/League</h2>
+          <button
+            type="button"
+            onClick={onClose}
+            className={`rounded px-1 text-sm text-slate-400 transition-colors hover:text-slate-200 ${focusRing}`}
+          >
             Close
           </button>
         </div>
 
-        <form onSubmit={handleAdd} className="flex flex-col gap-2">
+        <form onSubmit={handleAdd} className="flex flex-col gap-2.5">
           <select
             value={sportChoice}
             onChange={(e) => setSportChoice(e.target.value)}
-            className="rounded-md border border-slate-700 bg-slate-800 px-2 py-1 text-sm"
+            className={`text-sm ${inputClass}`}
           >
             {existingSports.map((sport) => (
               <option key={sport} value={sport}>
@@ -94,7 +105,7 @@ export function AddSportLeagueModal({
               value={newSport}
               onChange={(e) => setNewSport(e.target.value)}
               placeholder="New sport name (e.g. Cricket)"
-              className="rounded-md border border-slate-700 bg-slate-800 px-2 py-1 text-sm"
+              className={`text-sm ${inputClass}`}
             />
           )}
 
@@ -103,25 +114,23 @@ export function AddSportLeagueModal({
             value={league}
             onChange={(e) => setLeague(e.target.value)}
             placeholder="League (e.g. IPL)"
-            className="rounded-md border border-slate-700 bg-slate-800 px-2 py-1 text-sm"
+            className={`text-sm ${inputClass}`}
           />
           {error && <p className="text-xs text-red-400">{error}</p>}
-          <button
-            type="submit"
-            disabled={saving}
-            className="rounded-md bg-emerald-600 py-2 text-sm font-medium disabled:opacity-50"
-          >
+          <button type="submit" disabled={saving} className={`py-2 text-sm ${primaryButtonClass}`}>
             {saving ? 'Adding…' : 'Add'}
           </button>
         </form>
 
         {entries.length > 0 && (
-          <div className="mt-4 flex flex-col gap-1">
-            <p className="text-xs text-slate-500">Your custom entries</p>
+          <div className="mt-4 flex flex-col gap-1.5">
+            <p className="text-xs font-medium uppercase tracking-wide text-slate-500">
+              Your custom entries
+            </p>
             {entries.map((entry) => (
               <div
                 key={entry.id}
-                className="flex items-center justify-between rounded-md bg-slate-800 px-2 py-1 text-xs"
+                className="flex items-center justify-between rounded-lg bg-slate-800 px-2.5 py-1.5 text-xs"
               >
                 <span>
                   {entry.sport} · {entry.league}
@@ -129,7 +138,7 @@ export function AddSportLeagueModal({
                 <button
                   type="button"
                   onClick={() => void handleDelete(entry.id)}
-                  className="text-red-400"
+                  className={`rounded px-1.5 py-0.5 transition-colors ${focusRing} ${dangerButtonClass}`}
                 >
                   Remove
                 </button>

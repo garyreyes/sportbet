@@ -1,3 +1,4 @@
+import { dangerButtonClass, inputClass, secondaryButtonClass } from '../../shared/styles'
 import { MIN_LEGS, type Leg } from './types'
 
 interface LegEditorProps {
@@ -29,14 +30,19 @@ export function LegEditor({ legs, onChange, sportLeagues }: LegEditorProps) {
   return (
     <div className="flex flex-col gap-3">
       {legs.map((leg, index) => (
-        <div key={index} className="flex flex-col gap-2 rounded-md border border-slate-800 p-3">
+        <div
+          key={index}
+          className="flex flex-col gap-2 rounded-xl border border-slate-800 bg-slate-950/60 p-3"
+        >
           <div className="flex items-center justify-between">
-            <span className="text-xs text-slate-400">Leg {index + 1}</span>
+            <span className="text-xs font-medium uppercase tracking-wide text-slate-500">
+              Leg {index + 1}
+            </span>
             {legs.length > MIN_LEGS && (
               <button
                 type="button"
                 onClick={() => removeLeg(index)}
-                className="text-xs text-red-400"
+                className={`rounded px-2 py-0.5 text-xs ${dangerButtonClass}`}
               >
                 Remove
               </button>
@@ -46,7 +52,7 @@ export function LegEditor({ legs, onChange, sportLeagues }: LegEditorProps) {
             <select
               value={leg.sport}
               onChange={(e) => updateLeg(index, { sport: e.target.value })}
-              className="flex-1 rounded-md border border-slate-700 bg-slate-900 px-2 py-1 text-sm"
+              className={`flex-1 text-sm ${inputClass}`}
             >
               {sports.map((sport) => (
                 <option key={sport} value={sport}>
@@ -57,7 +63,7 @@ export function LegEditor({ legs, onChange, sportLeagues }: LegEditorProps) {
             <select
               value={leg.league}
               onChange={(e) => updateLeg(index, { league: e.target.value })}
-              className="flex-1 rounded-md border border-slate-700 bg-slate-900 px-2 py-1 text-sm"
+              className={`flex-1 text-sm ${inputClass}`}
             >
               {sportLeagues[leg.sport].map((league) => (
                 <option key={league} value={league}>
@@ -71,14 +77,14 @@ export function LegEditor({ legs, onChange, sportLeagues }: LegEditorProps) {
             value={leg.pick}
             onChange={(e) => updateLeg(index, { pick: e.target.value })}
             placeholder="Pick (optional)"
-            className="rounded-md border border-slate-700 bg-slate-900 px-2 py-1 text-sm"
+            className={`text-sm ${inputClass}`}
           />
         </div>
       ))}
       <button
         type="button"
         onClick={addLeg}
-        className="rounded-md border border-slate-700 py-1 text-sm text-slate-300"
+        className={`py-1.5 text-sm ${secondaryButtonClass}`}
       >
         + Add leg
       </button>

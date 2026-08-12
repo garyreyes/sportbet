@@ -1,5 +1,6 @@
 import { calculateProfit } from '../../shared/utils/profit'
 import { filterDecisive, filterSettled } from '../../shared/utils/betFilters'
+import { cardClass } from '../../shared/styles'
 import type { Bet } from '../../shared/types/bet'
 
 interface Metric {
@@ -54,12 +55,14 @@ export function MetricGrid({ bets }: { bets: Bet[] }) {
   const metrics = computeMetrics(bets)
 
   return (
-    <div className="grid grid-cols-2 gap-2">
+    <div className="grid grid-cols-2 gap-3">
       {metrics.map((metric) => (
-        <div key={metric.label} className="rounded-md border border-slate-800 p-3">
-          <p className="text-xs text-slate-500">{metric.label}</p>
+        <div key={metric.label} className={`p-4 ${cardClass}`}>
+          <p className="text-xs font-medium uppercase tracking-wide text-slate-500">
+            {metric.label}
+          </p>
           <p
-            className={`text-lg font-semibold ${
+            className={`mt-1 text-xl font-semibold ${
               metric.positive === undefined
                 ? ''
                 : metric.positive

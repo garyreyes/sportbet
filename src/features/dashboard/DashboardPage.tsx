@@ -5,6 +5,7 @@ import { TimeRangeTabs } from '../../shared/components/TimeRangeTabs'
 import { TIME_RANGES, filterByRange, type TimeRange } from '../../shared/utils/timeRanges'
 import { MetricGrid } from './MetricGrid'
 import { MonthlyGoalCard } from './MonthlyGoalCard'
+import { ProfitChart } from './ProfitChart'
 import { StreakCard } from './StreakCard'
 
 export function DashboardPage() {
@@ -20,8 +21,8 @@ export function DashboardPage() {
   const rangedBets = filterByRange(bets, range.daysBack)
 
   return (
-    <div className="flex flex-col gap-4 p-4">
-      <div className="flex gap-2">
+    <div className="mx-auto flex max-w-2xl flex-col gap-6 p-4 pb-8 sm:p-6">
+      <div className="flex gap-3">
         <StreakCard bets={bets} />
         <MonthlyGoalCard userId={userId} bets={bets} />
       </div>
@@ -29,6 +30,8 @@ export function DashboardPage() {
       <TimeRangeTabs value={range} onChange={setRange} />
 
       <MetricGrid bets={rangedBets} />
+
+      <ProfitChart bets={rangedBets} />
     </div>
   )
 }
