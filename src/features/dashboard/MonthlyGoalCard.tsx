@@ -1,16 +1,10 @@
 import { useState } from 'react'
 import { calculateProfit } from '../../shared/utils/profit'
 import { filterSettled } from '../../shared/utils/betFilters'
+import { monthPrefix } from '../../shared/utils/date'
 import { cardClass, focusRingOnSurface, inputClass, primaryButtonClass, secondaryButtonClass } from '../../shared/styles'
 import type { Bet } from '../../shared/types/bet'
 import { updateMonthlyGoal, useMonthlyGoal } from './api'
-
-function currentMonthPrefix(): string {
-  const now = new Date()
-  const y = now.getFullYear()
-  const m = String(now.getMonth() + 1).padStart(2, '0')
-  return `${y}-${m}`
-}
 
 export function MonthlyGoalCard({ userId, bets }: { userId: string; bets: Bet[] }) {
   const { goal, setGoal, loading } = useMonthlyGoal(userId)
@@ -19,9 +13,9 @@ export function MonthlyGoalCard({ userId, bets }: { userId: string; bets: Bet[] 
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  const monthPrefix = currentMonthPrefix()
+  const currentMonthPrefix = monthPrefix(new Date())
   const monthProfit = filterSettled(bets)
-    .filter((bet) => bet.date.startsWith(monthPrefix))
+    .filter((bet) => bet.date.startsWith(currentMonthPrefix))
     .reduce((sum, bet) => sum + calculateProfit(bet.odds, bet.stake, bet.status), 0)
 
   const progressPct = goal > 0 ? Math.min(100, Math.max(0, (monthProfit / goal) * 100)) : 0
