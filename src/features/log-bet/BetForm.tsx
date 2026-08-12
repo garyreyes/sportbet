@@ -5,8 +5,6 @@ import { LegEditor } from './LegEditor'
 import { useDraft } from './useDraft'
 import {
   MIN_LEGS,
-  SPORTS,
-  SPORT_LEAGUES,
   emptyLeg,
   type Bet,
   type BetInput,
@@ -26,28 +24,30 @@ interface DraftState {
   status: BetStatus
 }
 
-function defaultDraft(): DraftState {
+function defaultDraft(sportLeagues: Record<string, string[]>): DraftState {
+  const sport = Object.keys(sportLeagues)[0]
   return {
     mode: 'single',
     date: toLocalDateKey(new Date()),
-    sport: SPORTS[0],
-    league: SPORT_LEAGUES[SPORTS[0]][0],
+    sport,
+    league: sportLeagues[sport][0],
     pick: '',
-    legs: [emptyLeg(), emptyLeg()],
+    legs: [emptyLeg(sportLeagues), emptyLeg(sportLeagues)],
     odds: '',
     stake: '',
     status: 'pending',
   }
 }
 
-function fromBet(bet: Bet): DraftState {
+function fromBet(bet: Bet, sportLeagues: Record<string, string[]>): DraftState {
+  const fallbackSport = Object.keys(sportLeagues)[0]
   return {
     mode: bet.legs ? 'parlay' : 'single',
     date: bet.date,
-    sport: bet.legs ? SPORTS[0] : bet.sport,
-    league: bet.legs ? SPORT_LEAGUES[SPORTS[0]][0] : bet.league,
+    sport: bet.legs ? fallbackSport : bet.sport,
+    league: bet.legs ? sportLeagues[fallbackSport][0] : bet.league,
     pick: bet.pick ?? '',
-    legs: bet.legs ?? [emptyLeg(), emptyLeg()],
+    legs: bet.legs ?? [emptyLeg(sportLeagues), emptyLeg(sportLeagues)],
     odds: String(bet.odds),
     stake: String(bet.stake),
     status: bet.status,
@@ -58,14 +58,16 @@ const STATUSES: BetStatus[] = ['win', 'loss', 'push', 'pending']
 
 interface BetFormProps {
   userId: string
+  sportLeagues: Record<string, string[]>
   initialBet?: Bet
   onSubmit: (input: BetInput) => Promise<void>
 }
 
-export function BetForm({ userId, initialBet, onSubmit }: BetFormProps) {
+export function BetForm({ userId, sportLeagues, initialBet, onSubmit }: BetFormProps) {
+  const sports = Object.keys(sportLeagues)
   const [draft, setDraft, clearDraft] = useDraft<DraftState>(
     `bet-draft:${userId}:${initialBet?.id ?? 'new'}`,
-    initialBet ? fromBet(initialBet) : defaultDraft(),
+    initialBet ? fromBet(initialBet, sportLeagues) : defaultDraft(sportLeagues),
   )
   const [error, setError] = useState<string | null>(null)
   const [saving, setSaving] = useState(false)
@@ -162,11 +164,11 @@ export function BetForm({ userId, initialBet, onSubmit }: BetFormProps) {
             <select
               value={draft.sport}
               onChange={(e) =>
-                update({ sport: e.target.value, league: SPORT_LEAGUES[e.target.value][0] })
+                update({ sport: e.target.value, league: sportLeagues[e.target.value][0] })
               }
               className="flex-1 rounded-md border border-slate-700 bg-slate-900 px-2 py-1 text-sm"
             >
-              {SPORTS.map((sport) => (
+              {sports.map((sport) => (
                 <option key={sport} value={sport}>
                   {sport}
                 </option>
@@ -177,7 +179,7 @@ export function BetForm({ userId, initialBet, onSubmit }: BetFormProps) {
               onChange={(e) => update({ league: e.target.value })}
               className="flex-1 rounded-md border border-slate-700 bg-slate-900 px-2 py-1 text-sm"
             >
-              {SPORT_LEAGUES[draft.sport].map((league) => (
+              {sportLeagues[draft.sport].map((league) => (
                 <option key={league} value={league}>
                   {league}
                 </option>
@@ -195,6 +197,7 @@ export function BetForm({ userId, initialBet, onSubmit }: BetFormProps) {
       ) : (
         <LegEditor
           legs={draft.legs}
+          sportLeagues={sportLeagues}
           onChange={(legs) =>
             update({ legs: legs.length >= MIN_LEGS ? legs : draft.legs })
           }

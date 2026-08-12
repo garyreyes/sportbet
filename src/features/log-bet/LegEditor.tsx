@@ -1,25 +1,29 @@
-import { MIN_LEGS, SPORTS, SPORT_LEAGUES, emptyLeg, type Leg } from './types'
+import { MIN_LEGS, type Leg } from './types'
 
 interface LegEditorProps {
   legs: Leg[]
   onChange: (legs: Leg[]) => void
+  sportLeagues: Record<string, string[]>
 }
 
-export function LegEditor({ legs, onChange }: LegEditorProps) {
+export function LegEditor({ legs, onChange, sportLeagues }: LegEditorProps) {
+  const sports = Object.keys(sportLeagues)
+
   const updateLeg = (index: number, patch: Partial<Leg>) => {
     onChange(
       legs.map((leg, i) => {
         if (i !== index) return leg
         const next = { ...leg, ...patch }
         if (patch.sport && patch.sport !== leg.sport) {
-          next.league = SPORT_LEAGUES[patch.sport][0]
+          next.league = sportLeagues[patch.sport][0]
         }
         return next
       }),
     )
   }
 
-  const addLeg = () => onChange([...legs, emptyLeg()])
+  const addLeg = () =>
+    onChange([...legs, { sport: sports[0], league: sportLeagues[sports[0]][0], pick: '' }])
   const removeLeg = (index: number) => onChange(legs.filter((_, i) => i !== index))
 
   return (
@@ -44,7 +48,7 @@ export function LegEditor({ legs, onChange }: LegEditorProps) {
               onChange={(e) => updateLeg(index, { sport: e.target.value })}
               className="flex-1 rounded-md border border-slate-700 bg-slate-900 px-2 py-1 text-sm"
             >
-              {SPORTS.map((sport) => (
+              {sports.map((sport) => (
                 <option key={sport} value={sport}>
                   {sport}
                 </option>
@@ -55,7 +59,7 @@ export function LegEditor({ legs, onChange }: LegEditorProps) {
               onChange={(e) => updateLeg(index, { league: e.target.value })}
               className="flex-1 rounded-md border border-slate-700 bg-slate-900 px-2 py-1 text-sm"
             >
-              {SPORT_LEAGUES[leg.sport].map((league) => (
+              {sportLeagues[leg.sport].map((league) => (
                 <option key={league} value={league}>
                   {league}
                 </option>
