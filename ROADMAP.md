@@ -21,10 +21,13 @@ Status values: `not started` / `in progress` / `done`.
 
 ## Phase 2 — Log (core bet data)
 
-- [ ] **2a. Bet Form** — not started. Single/parlay toggle, dynamic
-      add/remove leg list, odds, stake, live Projected Profit, confidence
-      stars, Win/Loss/Push/Pending buttons, localStorage draft
-      autosave/merge.
+- [x] **2a. Bet Form** — done. Single/parlay toggle, dynamic add/remove
+      leg list, decimal odds, stake, live Projected Profit, Win/Loss/
+      Push/Pending buttons, localStorage draft autosave/merge. No
+      confidence stars (column doesn't exist — see Phase 1b's drift
+      note). Built as a reusable `BetForm` (optional `initialBet` +
+      `onSubmit`) so Phase 2b's edit flow can reuse it without
+      duplicating the form.
 - [ ] **2b. Bet History** — not started. List of logged bets, inline edit
       (reuses the Bet Form component, parameterized new-vs-editing), delete.
 - [ ] **2c. History Rail + Add Sport/League modal** — not started.

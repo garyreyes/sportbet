@@ -1,5 +1,17 @@
 ## Unreleased
 
+### 2026-08-12 — Bet Form (Phase 2a)
+Log tab now has a working Bet Form: Single/Parlay toggle, dynamic leg
+list for parlays, decimal odds, stake, a live Projected Profit readout,
+and Win/Loss/Push/Pending buttons. Autosaves to localStorage as you type
+and merges over defaults on reload so an in-progress entry survives a
+closed tab. Saving inserts into `bets` under the signed-in user, with
+validation mirroring the database's own `odds > 0`/`stake > 0` checks so
+errors show up before a save attempt rather than as a raw Postgres
+message. Verified end to end against the real account. Built as a
+reusable component (`BetForm` takes an optional existing bet) so editing
+in Phase 2b won't need a second form.
+
 ### 2026-08-12 — Schema migration baseline + drift correction
 Captured the live Supabase schema as the first two tracked migrations
 (`supabase/migrations/`), working around a missing Docker install by
