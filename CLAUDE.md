@@ -13,8 +13,10 @@ they are the source of truth this rebuild is derived from.
 - `MIGRATION_EXTRACTION.md` — business rules, UI/UX inventory checklist,
   recovered SQL functions/triggers/RLS policies, structural debt to avoid
   repeating.
+- `ROADMAP.md` — phase/sub-phase breakdown of remaining work, with status
+  per sub-phase. Check this before picking the next thing to build.
 - `CHANGES.md` — running log of completed features, appended by
-  `feature-planner` as work lands.
+  `feature-planner` as work lands. Keep in sync with `ROADMAP.md`.
 - `supabase/migrations/` — tracked schema history. See its `README.md`
   before running anything against the live database.
 - `SECURITY_BASELINE.md` — the 18-point security checklist walked against
