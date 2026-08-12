@@ -6,6 +6,7 @@ import { getUserGroups } from './api'
 import { GroupDetail } from './GroupDetail'
 import { InviteJoinPrompt } from './InviteJoinPrompt'
 import { JoinCreateCard } from './JoinCreateCard'
+import { PrivacyToggles } from './PrivacyToggles'
 import type { GroupWithMembers } from './types'
 
 export function GroupsPage() {
@@ -72,6 +73,8 @@ export function GroupsPage() {
           onCreated={() => setRefreshKey((k) => k + 1)}
         />
       )}
+
+      <PrivacyToggles userId={userId} />
 
       {groupsError && <p className={`p-5 text-sm text-red-400 ${cardClass}`}>{groupsError}</p>}
 

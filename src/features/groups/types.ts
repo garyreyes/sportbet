@@ -23,6 +23,14 @@ export interface GroupWithMembers extends Group {
   members: GroupMember[]
 }
 
+export interface PrivacySettings {
+  hide_overall_pnl: boolean
+  hide_week_pnl: boolean
+  hide_month_pnl: boolean
+  hide_today_pnl: boolean
+  hide_win_rate: boolean
+}
+
 /** Mirrors get_group_leaderboard's return row. Profit/rate fields are null when the member hid that stat, or (win_rate only) when they have zero decisive bets — the RPC doesn't distinguish the two. */
 export interface LeaderboardRow {
   member_id: string
