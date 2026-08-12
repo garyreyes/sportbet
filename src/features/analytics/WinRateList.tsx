@@ -31,9 +31,15 @@ export function WinRateRows({
               />
             </div>
           </div>
-          <span className="w-20 shrink-0 text-right text-sm font-semibold">
+          <span className="shrink-0 whitespace-nowrap text-right text-sm font-semibold">
             {row.winRate.toFixed(0)}%{' '}
-            <span className="text-xs font-normal text-slate-500">({row.total})</span>
+            <span className="text-xs font-normal text-slate-500">({row.total})</span>{' '}
+            <span
+              className={`text-xs font-normal ${row.profit >= 0 ? 'text-emerald-400' : 'text-red-400'}`}
+            >
+              · {row.profit >= 0 ? '+' : ''}
+              {row.profit.toFixed(2)}
+            </span>
           </span>
         </div>
       ))}
