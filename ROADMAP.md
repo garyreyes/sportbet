@@ -73,10 +73,18 @@ item below.
 
 ## Phase 3 — Dashboard
 
-- [ ] **3a. Metrics** — not started. Streak card, Monthly Goal card, time
-      range tabs (Today/Past Week/Past Month/Past Year/All Time), 8-card
-      metric grid (Net Profit, ROI, Win Rate, Wagers, Staked, Pending,
-      Biggest Win, Biggest Loss).
+- [x] **3a. Metrics** — done. Streak card, editable Monthly Goal card
+      (calendar-month, new `profiles.monthly_goal` column), rolling time
+      range tabs (Today/Past 7 Days/Past 30 Days/Past Year/All Time — the
+      relabeled rolling windows per `ARCHITECTURE.md`'s revised decision,
+      not calendar-aligned), 8-card metric grid. `useBets()` promoted
+      from log-bet-local to a shared `BetsProvider` (wraps the router
+      `<Outlet>` in `AppLayout`) so Dashboard and Log now share one fetch
+      — the first real test of the "fetched once, every page derives its
+      own view" pattern. `Bet`/`BetStatus`/`Leg`/`BetInput` types, filter
+      helpers (decisive/settled), time-range config, and streak calc all
+      moved to `shared/` since this is the first feature to need them
+      outside Log.
 - [ ] **3b. Profit chart** — not started. Cumulative / Per Bet / Daily
       switchable views.
 - [ ] **Impeccable critique + polish (Phase 3)** — not started. Run once

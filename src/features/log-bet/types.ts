@@ -1,26 +1,6 @@
-export type BetStatus = 'win' | 'loss' | 'push' | 'pending'
+import type { Bet, Leg } from '../../shared/types/bet'
 
-export interface Leg {
-  sport: string
-  league: string
-  pick: string
-}
-
-export interface Bet {
-  id: string
-  user_id: string
-  sport: string
-  league: string
-  pick: string | null
-  odds: number
-  stake: number
-  status: BetStatus
-  date: string
-  legs: Leg[] | null
-  created_at: string
-}
-
-export type BetInput = Omit<Bet, 'id' | 'user_id' | 'created_at'>
+export type { BetStatus, Leg, Bet, BetInput } from '../../shared/types/bet'
 
 export const BASE_SPORT_LEAGUES: Record<string, string[]> = {
   MMA: ['UFC', 'PFL', 'Rizin'],
