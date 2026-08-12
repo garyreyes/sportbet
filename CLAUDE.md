@@ -17,6 +17,10 @@ they are the source of truth this rebuild is derived from.
   `feature-planner` as work lands.
 - `supabase/migrations/` — tracked schema history. See its `README.md`
   before running anything against the live database.
+- `SECURITY_BASELINE.md` — the 18-point security checklist walked against
+  this project, with open items (rate limiting on invite-code join, avatar
+  upload validation, backup verification, hosting headers) tracked as
+  decisions still to make.
 
 ## Rules that override default judgment
 
@@ -53,6 +57,26 @@ they are the source of truth this rebuild is derived from.
 - **Currency formatting always goes through the shared `formatCurrency`
   utility** — never a hardcoded `$` literal in a new component (see
   §"Don't carry over" #7).
+- **Never render user-authored text as raw HTML.** `pick`/leg text, group
+  `name`, `display_name` are all user-submitted — plain text rendering
+  only, never `dangerouslySetInnerHTML`. This is the primary XSS
+  mitigation for this stack, since Supabase's browser client stores the
+  session token in `localStorage` rather than an `HttpOnly` cookie (see
+  `SECURITY_BASELINE.md` §9).
+- **User-facing errors never surface raw Postgres/Supabase error text**
+  (constraint names, column names, stack traces). Catch and rewrite to a
+  friendly message; log the real error to the console in dev only (see
+  `SECURITY_BASELINE.md` §5).
+- **All Supabase queries go through the query builder or `.rpc()`** — never
+  a hand-built SQL string from user input (§4).
+- **Avatar/file uploads must be validated by real content type and size,
+  not filename**, ideally via Storage bucket config (MIME allowlist + size
+  cap), not just a client-side extension check (§16 — open item, resolve
+  when building the avatar upload feature).
+- **No LLM/paid third-party API call is ever made directly from the
+  browser.** If the AI Coach or export features grow into a real external
+  API call in the future, it must be proxied through a server function
+  holding the key (§8).
 
 ## Gates (enforced, not optional)
 
