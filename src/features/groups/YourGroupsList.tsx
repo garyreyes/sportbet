@@ -1,34 +1,15 @@
-import { useEffect, useState } from 'react'
 import { cardClass } from '../../shared/styles'
-import { getUserGroups } from './api'
 import { GroupCard } from './GroupCard'
 import type { GroupWithMembers } from './types'
 
 interface YourGroupsListProps {
   userId: string
-  refreshKey: number
+  groups: GroupWithMembers[] | null
+  error: string | null
   onChanged: () => void
 }
 
-export function YourGroupsList({ userId, refreshKey, onChanged }: YourGroupsListProps) {
-  const [groups, setGroups] = useState<GroupWithMembers[] | null>(null)
-  const [error, setError] = useState<string | null>(null)
-
-  useEffect(() => {
-    let cancelled = false
-    setError(null)
-    getUserGroups(userId)
-      .then((result) => {
-        if (!cancelled) setGroups(result)
-      })
-      .catch((err) => {
-        if (!cancelled) setError(err instanceof Error ? err.message : 'Could not load your groups.')
-      })
-    return () => {
-      cancelled = true
-    }
-  }, [userId, refreshKey])
-
+export function YourGroupsList({ userId, groups, error, onChanged }: YourGroupsListProps) {
   if (error) {
     return <p className={`p-5 text-sm text-red-400 ${cardClass}`}>{error}</p>
   }

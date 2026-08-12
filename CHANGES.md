@@ -1,5 +1,20 @@
 ## Unreleased
 
+### 2026-08-13 — Groups: Leaderboard (Phase 6c)
+Third Groups sub-phase. Ranked leaderboard per group: medals for the
+top 3, own row highlighted, overall profit as a hero stat with a bar
+relative to the group's top performer, Past 7 Days/Past 30 Days/Today
+as secondary stats, a group switcher (dropdown) when in more than one
+group, and a mixed-currency warning banner when members use different
+currencies. `get_group_leaderboard` already existed and already
+applies privacy toggles server-side, so no schema change and no
+client-side hiding logic — a hidden stat just comes back `null` and
+renders as "Hidden." Added a small `formatCurrency` utility, scoped to
+this panel only, since it's the first place two different currency
+symbols can appear side by side. Refactored `GroupsPage` to fetch the
+group list once and share it between the groups list and the
+leaderboard instead of each panel fetching separately.
+
 ### 2026-08-13 — Groups: Your Groups list (Phase 6b)
 Second Groups sub-phase. One collapsible card per group a user belongs
 to (defaults expanded only when they have exactly one group): invite
