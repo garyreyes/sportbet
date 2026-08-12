@@ -1,5 +1,17 @@
 ## Unreleased
 
+### 2026-08-13 — Groups: Join/Create card (Phase 6a)
+First real Groups feature, replacing the placeholder page. Tabbed
+Join/Create card, collapsible (expanded by default only for users with
+zero groups). Join flow (both a typed invite code and an `?invite=CODE`
+deep link) previews the group's name and asks for confirmation before
+joining, rather than auto-joining silently — needed a small new
+migration (`get_group_preview_by_invite_code`, a `SECURITY DEFINER` RPC
+returning just the name) since the existing `groups` RLS policy blocks
+a non-member from reading a group's name directly. Everything else
+(group/group_members tables, the owner-auto-join trigger, the join-by-code
+RPC) already existed in the baseline schema from the original app.
+
 ### 2026-08-12 — Analytics: full Phase 5 critique + polish (5a-5e)
 Dual-agent Impeccable critique of the complete Analytics tab (all five
 sub-phases together, the first time they've been judged as one cohesive
