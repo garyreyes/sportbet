@@ -1,5 +1,15 @@
 ## Unreleased
 
+### 2026-08-13 — Groups: Your Groups list (Phase 6b)
+Second Groups sub-phase. One collapsible card per group a user belongs
+to (defaults expanded only when they have exactly one group): invite
+link with a copy button, a member list with a kick button per member
+(owner only), rename (owner only, explicit edit → Save/Cancel rather
+than autosave), and delete (owner) or leave (member) reusing the
+existing tap-again-to-confirm pattern from bet history instead of a
+new confirmation modal. No schema changes — every mutation here was
+already covered by RLS policies from the baseline schema.
+
 ### 2026-08-13 — Groups: Join/Create card (Phase 6a)
 First real Groups feature, replacing the placeholder page. Tabbed
 Join/Create card, collapsible (expanded by default only for users with
