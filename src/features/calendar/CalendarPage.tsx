@@ -4,7 +4,7 @@ import { monthPrefix } from '../../shared/utils/date'
 import { cardClass, secondaryButtonClass } from '../../shared/styles'
 import { DayDetailPanel } from './DayDetailPanel'
 import { MonthGrid } from './MonthGrid'
-import { computeDailyTotals } from './monthGridData'
+import { computeDailyTotals, computeDaysWithOnlyPending } from './monthGridData'
 
 const MONTH_NAMES = [
   'January', 'February', 'March', 'April', 'May', 'June',
@@ -23,6 +23,10 @@ export function CalendarPage() {
   const dailyTotals = useMemo(
     () => computeDailyTotals(bets, currentMonthPrefix),
     [bets, currentMonthPrefix],
+  )
+  const pendingOnlyDays = useMemo(
+    () => computeDaysWithOnlyPending(bets, currentMonthPrefix, dailyTotals),
+    [bets, currentMonthPrefix, dailyTotals],
   )
   const monthTotal = useMemo(
     () => [...dailyTotals.values()].reduce((sum, v) => sum + v, 0),
@@ -79,6 +83,7 @@ export function CalendarPage() {
           year={year}
           month={month}
           dailyTotals={dailyTotals}
+          pendingOnlyDays={pendingOnlyDays}
           selectedDateKey={selectedDateKey}
           onSelect={setSelectedDateKey}
         />

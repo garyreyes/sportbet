@@ -131,7 +131,21 @@ item below.
       calendar-month logic — now the one shared source both use, so the
       Calendar month total and Dashboard's Monthly Goal figure are
       guaranteed to agree for the same month.
-- [ ] **Impeccable critique + polish (Phase 4)** — not started.
+- [x] **Impeccable critique + polish (Phase 4)** — done. Dual-agent
+      critique scored 26/40 (Acceptable band). Fixed the P0 + P1
+      issues: `computeDaysWithOnlyPending()` distinguishes a
+      pending-only day (small amber dot) from a genuinely empty day —
+      previously both rendered as the identical neutral gray cell,
+      while the day panel showed unfiltered bets, so tapping an
+      "empty" cell could silently reveal pending activity; day cells
+      now carry a full `aria-label` (date + net profit or pending/empty
+      status) instead of just the bare day number. Confirmed the
+      Phase 3 `focusRingOnSurface` fix was **not** regressed by this
+      new code. Remaining findings (no magnitude encoding — a -$5 and
+      -$5,000 day render identically, misleading green "0.00" on a
+      zero-data month, no legend, no jump-to-month) logged in
+      `.impeccable/critique/2026-08-12T12-11-17Z__src-features-calendar.md`
+      for a later pass.
 
 ## Phase 5 — Analytics
 
