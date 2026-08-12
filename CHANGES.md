@@ -1,5 +1,17 @@
 ## Unreleased
 
+### 2026-08-12 — Analytics: Category Win Rates + Odds Range Breakdown (Phase 5a)
+Analytics tab is live with its shared time-range tabs and two panels:
+Category Win Rates (by league, with all parlays deliberately collapsed
+into one "Parlay" bucket rather than exploded per leg, per the documented
+rule) and Win Rate by Odds Range (a standard 6-bucket favorite→longshot
+scheme, 1.01–1.50 through 10.01+). Fourth feature to consume the shared
+`useBetsContext()`. `AnalyticsPage` owns time-range state and passes
+ranged bets to each panel — this is the template the remaining four
+Analytics sub-phases will follow. Verified against the real account,
+including that parlay bets aren't exploded across categories and bucket
+counts sum correctly.
+
 ### 2026-08-12 — Phase 4 design critique + fixes
 Ran the Phase 4 Impeccable checkpoint on Calendar, scored 26/40. Fixed
 the P0: a day with only pending bets (no settled ones) rendered as an

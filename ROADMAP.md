@@ -149,8 +149,13 @@ item below.
 
 ## Phase 5 — Analytics
 
-- [ ] **5a. Category Win Rates + Odds Range Breakdown** — not started.
-      Plus the shared time-range tabs for this tab.
+- [x] **5a. Category Win Rates + Odds Range Breakdown** — done. Shared
+      `TimeRangeTabs` wired into Analytics (fourth `useBetsContext()`
+      consumer). Category grouping deliberately collapses all parlays
+      into one "Parlay" bucket rather than exploding per leg (Keep #5).
+      Odds bucketed into a standard 6-range favorite→longshot scheme
+      (1.01–1.50 ... 10.01+). `AnalyticsPage` owns time-range state and
+      passes ranged bets down to panels — the template `5b`–`5e` follow.
 - [ ] **5b. Leg Breakdown + Bet Type Comparison + Parlay Sport Composition**
       — not started.
 - [ ] **5c. Confidence Calibration + Rolling Form Trend + Stake Discipline**
