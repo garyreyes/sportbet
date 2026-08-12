@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
+import { cardClass, focusRingOnSurface, inputClass } from '../../shared/styles'
 import { useAuth } from '../auth/useAuth'
 import { getUserGroups } from './api'
+import { GroupDetail } from './GroupDetail'
 import { InviteJoinPrompt } from './InviteJoinPrompt'
 import { JoinCreateCard } from './JoinCreateCard'
-import { Leaderboard } from './Leaderboard'
 import type { GroupWithMembers } from './types'
-import { YourGroupsList } from './YourGroupsList'
 
 export function GroupsPage() {
   const { session } = useAuth()
@@ -15,6 +15,7 @@ export function GroupsPage() {
   const [inviteCode, setInviteCode] = useState(searchParams.get('invite'))
   const [groups, setGroups] = useState<GroupWithMembers[] | null>(null)
   const [groupsError, setGroupsError] = useState<string | null>(null)
+  const [selectedGroupId, setSelectedGroupId] = useState<string | null>(null)
   const [refreshKey, setRefreshKey] = useState(0)
 
   useEffect(() => {
@@ -33,6 +34,13 @@ export function GroupsPage() {
     }
   }, [userId, refreshKey])
 
+  useEffect(() => {
+    if (!groups) return
+    if (!groups.some((g) => g.id === selectedGroupId)) {
+      setSelectedGroupId(groups[0]?.id ?? null)
+    }
+  }, [groups, selectedGroupId])
+
   const clearInvite = () => {
     setInviteCode(null)
     setSearchParams((prev) => {
@@ -49,6 +57,8 @@ export function GroupsPage() {
 
   if (!userId) return null
 
+  const selectedGroup = groups?.find((g) => g.id === selectedGroupId) ?? null
+
   return (
     <div className="mx-auto flex max-w-2xl flex-col gap-4 p-4 pb-8 sm:p-6">
       {inviteCode && (
@@ -62,14 +72,43 @@ export function GroupsPage() {
           onCreated={() => setRefreshKey((k) => k + 1)}
         />
       )}
-      <YourGroupsList
-        userId={userId}
-        groups={groups}
-        error={groupsError}
-        onChanged={() => setRefreshKey((k) => k + 1)}
-      />
-      {groups !== null && groups.length > 0 && (
-        <Leaderboard currentUserId={userId} groups={groups} refreshKey={refreshKey} />
+
+      {groupsError && <p className={`p-5 text-sm text-red-400 ${cardClass}`}>{groupsError}</p>}
+
+      {!groupsError && groups === null && (
+        <p className={`p-5 text-sm text-slate-500 ${cardClass}`}>Loading your groups…</p>
+      )}
+
+      {!groupsError && groups !== null && groups.length === 0 && (
+        <p className={`p-5 text-sm text-slate-500 ${cardClass}`}>
+          You haven't joined or created a group yet.
+        </p>
+      )}
+
+      {!groupsError && groups !== null && groups.length > 0 && (
+        <>
+          {groups.length > 1 && (
+            <select
+              value={selectedGroupId ?? ''}
+              onChange={(e) => setSelectedGroupId(e.target.value)}
+              className={`text-sm ${inputClass} ${focusRingOnSurface}`}
+            >
+              {groups.map((group) => (
+                <option key={group.id} value={group.id}>
+                  {group.name}
+                </option>
+              ))}
+            </select>
+          )}
+          {selectedGroup && (
+            <GroupDetail
+              group={selectedGroup}
+              currentUserId={userId}
+              refreshKey={refreshKey}
+              onChanged={() => setRefreshKey((k) => k + 1)}
+            />
+          )}
+        </>
       )}
     </div>
   )

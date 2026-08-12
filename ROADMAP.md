@@ -305,6 +305,30 @@ item below.
       down to both `YourGroupsList` and `Leaderboard`, replacing 6b's
       standalone `getGroupCount` (now deleted) so the two panels don't
       duplicate the same fetch.
+- [x] **Post-6c fix: single-group-detail view + group-create RLS bug**
+      — done. User feedback after seeing 6b/6c live together: with
+      several groups, a stacked card list (6b) *plus* a separately
+      switchable leaderboard (6c) duplicated each group's identity in
+      two places and produced too much scroll. Replaced both
+      `GroupCard`/`YourGroupsList` and `Leaderboard`'s per-group content
+      with one `GroupDetail.tsx` and a single page-level dropdown in
+      `GroupsPage.tsx` — only the selected group's invite link,
+      leaderboard, and member management (now collapsed by default
+      under "Manage group") render at a time, so the page stays compact
+      regardless of how many groups someone's in. While verifying this
+      live, discovered `createGroup` had been broken since 6a: it always
+      failed with a row-level-security error. Root cause:
+      `insert().select()` compiles to `INSERT ... RETURNING *`, and
+      `groups_select_member`'s `is_group_member(id)` check couldn't see
+      the owner's membership row yet, since that's only added by the
+      `on_group_created` *trigger* — whose effect isn't visible to the
+      `RETURNING` clause's policy check within the same statement. Fixed
+      via a small migration widening `groups_select_member` to also
+      allow `owner_id = auth.uid()` directly, sidestepping the
+      trigger-timing dependency entirely (additive, no security
+      regression). Full incident writeup, including how to spot this
+      class of bug faster next time, at
+      `docs/incidents/2026-08-13-group-create-rls-returning.md`.
 - [ ] **6d. Privacy Toggles** — not started. Per-stat visibility
       (overall P&L, overall win rate, week/month/today).
 - [ ] **Impeccable critique + polish (Phase 6)** — not started.
