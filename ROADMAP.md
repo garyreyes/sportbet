@@ -250,9 +250,21 @@ item below.
 
 ## Phase 6 — Groups
 
-- [ ] **6a. Join/Create card** — not started. Tabbed, collapsible;
-      `join_group_by_invite_code` wiring; owner auto-join via
-      `handle_new_group` trigger (no client insert needed).
+- [x] **6a. Join/Create card** — done. Tabbed (Join/Create), collapsible
+      (defaults expanded if the user has zero groups, collapsed once
+      they have at least one). `groups`/`group_members` and both
+      `handle_new_group` (trigger)/`join_group_by_invite_code` (RPC)
+      already existed in the baseline schema — owner auto-join needed no
+      client insert. One new migration added:
+      `get_group_preview_by_invite_code`, a narrow `SECURITY DEFINER`
+      RPC returning just `{id, name}` by invite code with no membership
+      check, since `groups_select_member`'s RLS blocks a plain SELECT
+      for a non-member and the confirm-before-joining flow (chosen over
+      silent auto-join) needs to show the group's name before the user
+      commits. Both the `?invite=CODE` deep-link path and manually typed
+      codes go through the same preview-then-confirm step. Applied via
+      `supabase db push` after explicit user confirmation, per the
+      project's live-database rule.
 - [ ] **6b. Your Groups list** — not started. Invite link/copy, member
       list with kick (owner), rename (owner), delete (owner)/leave (member).
 - [ ] **6c. Leaderboard** — not started. `get_group_leaderboard` RPC,
