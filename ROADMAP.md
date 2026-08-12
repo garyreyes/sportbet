@@ -156,8 +156,19 @@ item below.
       Odds bucketed into a standard 6-range favorite→longshot scheme
       (1.01–1.50 ... 10.01+). `AnalyticsPage` owns time-range state and
       passes ranged bets down to panels — the template `5b`–`5e` follow.
-- [ ] **5b. Leg Breakdown + Bet Type Comparison + Parlay Sport Composition**
-      — not started.
+- [x] **5b. Leg Breakdown + Bet Type Comparison + Parlay Sport Composition**
+      — done. Leg Breakdown groups whole-parlay outcomes by leg count
+      (2/3/4/5/6+, long tail bucketed per the odds-bucket precedent),
+      with a collapse toggle (only this panel is described as
+      collapsible in the UI inventory). Bet Type Comparison (Straight
+      vs Parlay) reuses the `WinRateList` shape directly. Parlay Sport
+      Composition counts sport frequency across all parlay legs — the
+      one place per-leg data is aggregated, since Keep #5 restricts
+      *outcome* attribution per leg, not composition counting; got its
+      own `FrequencyList` display component since counts aren't
+      percentages. Extracted `WinRateRows` out of `WinRateList` so
+      Leg Breakdown's collapsible variant didn't duplicate the row
+      markup.
 - [ ] **5c. Confidence Calibration + Rolling Form Trend + Stake Discipline**
       — not started.
 - [ ] **5d. Monte Carlo Simulation** — not started. Bootstrap resampling,
