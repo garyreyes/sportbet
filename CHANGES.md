@@ -1,5 +1,20 @@
 ## Unreleased
 
+### 2026-08-12 — History Rail + Add Sport/League (Phase 2c)
+Bet History can now be minimized to a two-icon rail (expand, add
+sport/league) instead of always showing the full list. Added an "Add
+Sport/League" modal so users can extend the built-in sport/league list
+with their own — stored server-side in a new `custom_sport_leagues`
+table (per-user, RLS-scoped like `bets`) rather than localStorage, so it
+syncs across devices. The modal's sport field is a dropdown of existing
+sports plus "add new," not free text, so adding a league under an
+existing sport (e.g. Basketball) can't create a case-mismatched
+duplicate. `BetForm`/`LegEditor` now take a merged sport/league list as
+a prop instead of importing a hardcoded constant. First schema change
+made during the rebuild itself (as opposed to the Phase 1b baseline
+capture) — applied with `supabase db push`, which turned out not to need
+Docker the way `db pull`/`db dump` did.
+
 ### 2026-08-12 — Bet History (Phase 2b)
 Log tab now lists every logged bet (most recent first), each expandable
 into the same `BetForm` used to create it for inline editing, plus delete

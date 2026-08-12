@@ -13,11 +13,18 @@ const STATUS_COLOR: Record<Bet['status'], string> = {
 interface BetHistoryRowProps {
   bet: Bet
   userId: string
+  sportLeagues: Record<string, string[]>
   onSave: (input: BetInput) => Promise<void>
   onDelete: () => Promise<void>
 }
 
-export function BetHistoryRow({ bet, userId, onSave, onDelete }: BetHistoryRowProps) {
+export function BetHistoryRow({
+  bet,
+  userId,
+  sportLeagues,
+  onSave,
+  onDelete,
+}: BetHistoryRowProps) {
   const [expanded, setExpanded] = useState(false)
   const [confirmingDelete, setConfirmingDelete] = useState(false)
   const [deleting, setDeleting] = useState(false)
@@ -86,7 +93,12 @@ export function BetHistoryRow({ bet, userId, onSave, onDelete }: BetHistoryRowPr
 
       {expanded && (
         <div className="border-t border-slate-800">
-          <BetForm userId={userId} initialBet={bet} onSubmit={handleSave} />
+          <BetForm
+            userId={userId}
+            sportLeagues={sportLeagues}
+            initialBet={bet}
+            onSubmit={handleSave}
+          />
         </div>
       )}
     </div>

@@ -22,7 +22,7 @@ export interface Bet {
 
 export type BetInput = Omit<Bet, 'id' | 'user_id' | 'created_at'>
 
-export const SPORT_LEAGUES: Record<string, string[]> = {
+export const BASE_SPORT_LEAGUES: Record<string, string[]> = {
   MMA: ['UFC', 'PFL', 'Rizin'],
   Tennis: ['WTA'],
   Basketball: ['NBA', 'WNBA'],
@@ -30,10 +30,27 @@ export const SPORT_LEAGUES: Record<string, string[]> = {
   'Kickboxing/Muay Thai': ['ONE'],
 }
 
-export const SPORTS = Object.keys(SPORT_LEAGUES)
-
 export const MIN_LEGS = 2
 
-export function emptyLeg(): Leg {
-  return { sport: SPORTS[0], league: SPORT_LEAGUES[SPORTS[0]][0], pick: '' }
+export interface CustomEntry {
+  sport: string
+  league: string
+}
+
+/** Built-in list plus the user's custom additions, deduped per sport. */
+export function mergeSportLeagues(custom: CustomEntry[]): Record<string, string[]> {
+  const merged: Record<string, string[]> = {}
+  for (const [sport, leagues] of Object.entries(BASE_SPORT_LEAGUES)) {
+    merged[sport] = [...leagues]
+  }
+  for (const { sport, league } of custom) {
+    if (!merged[sport]) merged[sport] = []
+    if (!merged[sport].includes(league)) merged[sport].push(league)
+  }
+  return merged
+}
+
+export function emptyLeg(sportLeagues: Record<string, string[]>): Leg {
+  const sport = Object.keys(sportLeagues)[0]
+  return { sport, league: sportLeagues[sport][0], pick: '' }
 }
