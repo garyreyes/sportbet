@@ -11,9 +11,13 @@ Status values: `not started` / `in progress` / `done`.
 
 - [x] **1a. App shell + Supabase auth** — done. Routing, bottom nav, OAuth
       sign-in, route guard, invite-link passthrough.
-- [ ] **1b. Seed schema migration baseline** — not started. `supabase
-      login` + `link` + `db pull` against the live project, commit the
-      result as migration `0000`. See `supabase/migrations/README.md`.
+- [x] **1b. Seed schema migration baseline** — done. `db pull` needed
+      Docker (unavailable here), so used a direct `pg_dump`/`psql`
+      connection instead. Discovered real schema drift vs
+      `MIGRATION_EXTRACTION.md` (confirmed intentional by the user);
+      `ARCHITECTURE.md`'s entity model updated to match live reality. See
+      `supabase/migrations/README.md` and `ARCHITECTURE.md` → "Schema
+      drift note".
 
 ## Phase 2 — Log (core bet data)
 
