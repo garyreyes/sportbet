@@ -25,13 +25,25 @@ export function AnalyticsPage() {
     <div className="mx-auto flex max-w-2xl flex-col gap-4 p-4 pb-8 sm:p-6">
       <AICoachPanel bets={bets} />
       <TimeRangeTabs value={range} onChange={setRange} />
+
+      <h2 className="mt-2 border-t border-slate-800 pt-4 text-sm font-semibold text-slate-300">
+        Breakdowns
+      </h2>
       <CategoryWinRates bets={rangedBets} />
       <OddsRangeBreakdown bets={rangedBets} />
       <LegBreakdown bets={rangedBets} />
       <BetTypeComparison bets={rangedBets} />
       <ParlaySportComposition bets={rangedBets} />
+
+      <h2 className="mt-2 border-t border-slate-800 pt-4 text-sm font-semibold text-slate-300">
+        Trends
+      </h2>
       <RollingFormTrend bets={rangedBets} />
       <StakeDiscipline bets={rangedBets} />
+
+      <h2 className="mt-2 border-t border-slate-800 pt-4 text-sm font-semibold text-slate-300">
+        Simulation
+      </h2>
       <MonteCarloSimulation bets={bets} />
     </div>
   )

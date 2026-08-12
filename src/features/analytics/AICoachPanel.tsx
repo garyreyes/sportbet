@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { ScopeBadge } from '../../shared/components/ScopeBadge'
 import { cardClass, secondaryButtonClass } from '../../shared/styles'
 import { computeInsights } from './insights'
 import type { Bet } from '../../shared/types/bet'
@@ -13,9 +14,9 @@ export function AICoachPanel({ bets }: { bets: Bet[] }) {
 
   return (
     <div className={`flex flex-col gap-3 p-5 ${cardClass}`}>
-      <div>
+      <div className="flex flex-col gap-1.5">
         <h2 className="text-xs font-medium uppercase tracking-wide text-slate-500">AI Coach</h2>
-        <p className="text-[11px] text-slate-500">Full history — not linked to the tabs below</p>
+        <ScopeBadge>Full history</ScopeBadge>
       </div>
 
       {insights.length === 0 ? (

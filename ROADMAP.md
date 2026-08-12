@@ -228,9 +228,25 @@ item below.
       `calculateProfit`. Parlay Sport Composition intentionally excluded
       (frequency count, not a per-bet outcome — no clean profit
       attribution per leg).
-- [ ] **Impeccable critique + polish (Phase 5)** — not started. Run once
-      5a–5e are all done (they are) — five sub-phases sharing one tab,
-      review as one cohesive surface.
+- [x] **Impeccable critique + polish (Phase 5 full, 5a–5e)** — done.
+      Dual-agent critique scored 26/40 (Acceptable), up from 21/40 on the
+      earlier 5a–5d-only pass. Fixed all 5 findings: profit figures on the
+      four win-rate panels now carry a "P/L" label instead of a bare
+      signed number (P0 — no currency utility exists yet, so this labels
+      the figure rather than guessing a symbol, deferred properly to
+      Phase 7a); Parlay Sport Composition gained an explanatory caption
+      for why it has no win-rate/profit figure unlike the panels above it
+      (P1); the page now groups its nine data panels under "Breakdowns" /
+      "Trends" / "Simulation" section labels instead of reading as one
+      flat stack of ten same-weight cards (P1); a new shared `ScopeBadge`
+      pill (amber, dot + text) replaces the plain caption text on AI
+      Coach and Monte Carlo's independent-scope disclosures, so the two
+      "this control isn't linked to the tabs" panels are visually
+      distinct at a glance, not just via small caption text (P2), and
+      gives AI Coach's presentation a idiom it can share with another
+      panel instead of being a one-off style (P3). Findings logged in
+      `.impeccable/critique/2026-08-12T15-09-31Z__src-features-analytics.md`.
+      **Phase 5 (Analytics) is complete.**
 
 ## Phase 6 — Groups
 
