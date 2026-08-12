@@ -265,8 +265,21 @@ item below.
       codes go through the same preview-then-confirm step. Applied via
       `supabase db push` after explicit user confirmation, per the
       project's live-database rule.
-- [ ] **6b. Your Groups list** — not started. Invite link/copy, member
-      list with kick (owner), rename (owner), delete (owner)/leave (member).
+- [x] **6b. Your Groups list** — done. One collapsible card per group
+      (defaults expanded only if the user has exactly one group), each
+      with: invite link + copy button (`origin/groups?invite=CODE`);
+      member list showing name/owner tag with a kick button per non-self
+      member (owner only); rename (owner only, edit-button → input +
+      Save/Cancel, not autosave-on-blur — that pattern doesn't exist yet
+      elsewhere in the app); delete (owner) or leave (member), reusing
+      `BetHistoryRow`'s tap-again-to-confirm pattern rather than a new
+      modal. No schema changes needed — `groups_update_owner` already
+      covered rename, kick/leave/delete were already fully covered by
+      existing RLS policies. `getUserGroups()` fetches group_members,
+      groups, and profiles as three separate queries and merges
+      client-side, since `group_members.user_id` references
+      `auth.users`, not `profiles`, so PostgREST can't embed a profile
+      join directly off it.
 - [ ] **6c. Leaderboard** — not started. `get_group_leaderboard` RPC,
       group switcher, medal badges, hero stat with relative bar,
       mixed-currency warning banner.

@@ -4,6 +4,7 @@ import { useAuth } from '../auth/useAuth'
 import { getGroupCount } from './api'
 import { InviteJoinPrompt } from './InviteJoinPrompt'
 import { JoinCreateCard } from './JoinCreateCard'
+import { YourGroupsList } from './YourGroupsList'
 
 export function GroupsPage() {
   const { session } = useAuth()
@@ -53,6 +54,11 @@ export function GroupsPage() {
           onCreated={() => setRefreshKey((k) => k + 1)}
         />
       )}
+      <YourGroupsList
+        userId={userId}
+        refreshKey={refreshKey}
+        onChanged={() => setRefreshKey((k) => k + 1)}
+      />
     </div>
   )
 }
