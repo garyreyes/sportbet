@@ -7,6 +7,8 @@ import { CategoryWinRates } from './CategoryWinRates'
 import { LegBreakdown } from './LegBreakdown'
 import { OddsRangeBreakdown } from './OddsRangeBreakdown'
 import { ParlaySportComposition } from './ParlaySportComposition'
+import { RollingFormTrend } from './RollingFormTrend'
+import { StakeDiscipline } from './StakeDiscipline'
 
 export function AnalyticsPage() {
   const { bets, loading, error } = useBetsContext()
@@ -25,6 +27,8 @@ export function AnalyticsPage() {
       <LegBreakdown bets={rangedBets} />
       <BetTypeComparison bets={rangedBets} />
       <ParlaySportComposition bets={rangedBets} />
+      <RollingFormTrend bets={rangedBets} />
+      <StakeDiscipline bets={rangedBets} />
     </div>
   )
 }
