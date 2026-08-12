@@ -182,8 +182,16 @@ item below.
       `shared/utils/chartTheme.ts` and `shared/components/ChartTooltip.tsx`
       out of `ProfitChart` since this is now the third/fourth chart
       needing the identical dark-theme treatment.
-- [ ] **5d. Monte Carlo Simulation** — not started. Bootstrap resampling,
-      500 trials, 5-bet minimum guard, Both/Straight/Parlay filter.
+- [x] **5d. Monte Carlo Simulation** — done. Bootstrap resampling (500
+      trials, draw-with-replacement from real historical settled-bet
+      profits), 5-bet minimum guard, Both/Straight/Parlay filter,
+      bet-count slider (1–100, default 20), expected profit/probability-
+      of-profit/range stats, histogram. Initially wired to the shared
+      Analytics time-range tabs like every other panel, then given its
+      **own local time-range control** per user feedback after seeing it
+      live — the panel sits far down the page, so scrolling to the top
+      tabs to change range was annoying enough to warrant a dedicated
+      one, decoupled from the page-level range.
 - [ ] **5e. AI Coach Panel** — not started. Ranked insight list, tuned
       thresholds (min 3 decisive bets, ≥15pp gap, ≥3-bet streaks).
 - [ ] **Impeccable critique + polish (Phase 5)** — not started. Run once

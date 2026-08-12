@@ -5,6 +5,7 @@ import { TIME_RANGES, filterByRange, type TimeRange } from '../../shared/utils/t
 import { BetTypeComparison } from './BetTypeComparison'
 import { CategoryWinRates } from './CategoryWinRates'
 import { LegBreakdown } from './LegBreakdown'
+import { MonteCarloSimulation } from './MonteCarloSimulation'
 import { OddsRangeBreakdown } from './OddsRangeBreakdown'
 import { ParlaySportComposition } from './ParlaySportComposition'
 import { RollingFormTrend } from './RollingFormTrend'
@@ -29,6 +30,7 @@ export function AnalyticsPage() {
       <ParlaySportComposition bets={rangedBets} />
       <RollingFormTrend bets={rangedBets} />
       <StakeDiscipline bets={rangedBets} />
+      <MonteCarloSimulation bets={bets} />
     </div>
   )
 }

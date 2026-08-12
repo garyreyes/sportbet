@@ -1,5 +1,16 @@
 ## Unreleased
 
+### 2026-08-12 — Analytics: Monte Carlo Simulation (Phase 5d)
+Bootstrap-resampling Monte Carlo panel: 500 trials drawing with
+replacement from real historical settled-bet profits, a 5-bet minimum
+guard for the Straight/Parlay-only filters, a bet-count slider (1–100,
+default 20), expected profit / probability of profit / range stats, and
+a histogram. Initially respected the shared Analytics time-range tabs
+like every other panel; after seeing it live, switched to a dedicated
+local time-range control instead, since the panel sits far down the page
+and scrolling back to the top tabs on every range change was annoying
+enough to warrant its own.
+
 ### 2026-08-12 — Analytics: Rolling Form Trend + Stake Discipline (Phase 5c)
 Two more Analytics charts, with a scope change confirmed with the user
 first: Confidence Calibration is dropped from this sub-phase entirely,
