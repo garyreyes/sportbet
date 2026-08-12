@@ -1,5 +1,17 @@
 ## Unreleased
 
+### 2026-08-13 — Settings: Account + Preferences (Phase 7a)
+First real Settings feature, replacing the placeholder page. Account
+card: avatar upload with a camera-icon overlay (the rebuild's first
+Supabase Storage upload — client-side checks are just fast feedback,
+the `avatars` bucket now enforces a MIME allowlist and 5MB cap
+server-side, closing a Security Baseline open item), display name
+autosave-on-blur, sign out. Preferences card: currency picker, odds
+format (Decimal/American), date format — two new `profiles` columns.
+Scope decision: this ships the settings UI and saves the preferences;
+actually applying them across existing odds/currency/date displays
+elsewhere in the app is a deliberate follow-up, not bundled here.
+
 ### 2026-08-13 — Groups: Privacy Toggles (Phase 6d)
 Final Groups sub-phase. One card, five toggles controlling what
 groupmates can see on leaderboards (Overall/Past 30 Days/Past 7
