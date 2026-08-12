@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import { calculateProfit } from '../../shared/utils/profit'
 import { toLocalDateKey } from '../../shared/utils/date'
 import { LegEditor } from './LegEditor'
@@ -6,6 +6,7 @@ import { useDraft } from './useDraft'
 import {
   MIN_LEGS,
   emptyLeg,
+  ensureBetOptions,
   type Bet,
   type BetInput,
   type BetStatus,
@@ -63,7 +64,11 @@ interface BetFormProps {
   onSubmit: (input: BetInput) => Promise<void>
 }
 
-export function BetForm({ userId, sportLeagues, initialBet, onSubmit }: BetFormProps) {
+export function BetForm({ userId, sportLeagues: baseSportLeagues, initialBet, onSubmit }: BetFormProps) {
+  const sportLeagues = useMemo(
+    () => ensureBetOptions(baseSportLeagues, initialBet),
+    [baseSportLeagues, initialBet],
+  )
   const sports = Object.keys(sportLeagues)
   const [draft, setDraft, clearDraft] = useDraft<DraftState>(
     `bet-draft:${userId}:${initialBet?.id ?? 'new'}`,
@@ -74,7 +79,12 @@ export function BetForm({ userId, sportLeagues, initialBet, onSubmit }: BetFormP
 
   const odds = Number(draft.odds)
   const stake = Number(draft.stake)
-  const projectedProfit = calculateProfit(odds || 0, stake || 0, 'win')
+  const projectedProfit = calculateProfit(
+    odds || 0,
+    stake || 0,
+    draft.status === 'pending' ? 'win' : draft.status,
+  )
+  const profitLabel = draft.status === 'pending' ? 'Profit if this wins' : 'Profit'
 
   const update = (patch: Partial<DraftState>) => setDraft((prev) => ({ ...prev, ...patch }))
 
@@ -230,7 +240,7 @@ export function BetForm({ userId, sportLeagues, initialBet, onSubmit }: BetFormP
       </div>
 
       <p className="text-sm text-slate-400">
-        Projected profit:{' '}
+        {profitLabel}:{' '}
         <span className={projectedProfit >= 0 ? 'text-emerald-400' : 'text-red-400'}>
           {projectedProfit.toFixed(2)}
         </span>
