@@ -1,5 +1,24 @@
 ## Unreleased
 
+### 2026-08-13 — Groups: single group-detail view + createGroup RLS fix
+Restructured the Groups page after live feedback: 6b's stacked
+per-group card list and 6c's separately-switchable leaderboard
+duplicated each group's identity in two places and got noisy fast for
+anyone in several groups. Replaced both with one `GroupDetail.tsx` and
+a single page-level dropdown — only the selected group's invite link,
+leaderboard, and member management (now tucked under a collapsed
+"Manage group" toggle) show at a time.
+
+Also fixed a real bug found while verifying this live: creating a
+group had been broken since 6a, always failing with a row-level-security
+error. Root cause was subtle — `insert().select()` needs the new row to
+pass a SELECT policy too, and the owner's group membership (which is
+what that policy checked) is only added by an `AFTER INSERT` trigger,
+whose effect isn't visible to that same statement's check. Fixed with a
+small migration letting an owner see their own group directly. Full
+writeup, including how to catch this class of bug faster next time, at
+`docs/incidents/2026-08-13-group-create-rls-returning.md`.
+
 ### 2026-08-13 — Groups: Leaderboard (Phase 6c)
 Third Groups sub-phase. Ranked leaderboard per group: medals for the
 top 3, own row highlighted, overall profit as a hero stat with a bar
