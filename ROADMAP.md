@@ -56,9 +56,20 @@ item below.
       (per-user, RLS-scoped) — first schema change made *during* the
       rebuild itself, applied via `supabase db push` (works without
       Docker, unlike `db pull`/`db dump`).
-- [ ] **Impeccable critique + polish (Phase 2)** — not started. Run once
-      2a/2b/2c are all done (they are) — review Bet Form + History
-      together.
+- [x] **Impeccable critique + polish (Phase 2)** — done. Dual-agent
+      critique scored 19/40 (Poor band), code-only review (no dev
+      server/browser available to the sub-agents). Fixed the two
+      correctness issues chosen as this pass's scope: Projected Profit
+      was hardcoded to the win scenario regardless of selected status
+      (now reflects Loss/Push/Pending correctly, relabels to "Profit"
+      once settled); editing a bet after its custom league was deleted
+      could silently swap the recorded league on save (now guaranteed
+      via `ensureBetOptions`). Remaining findings (missing field labels,
+      status-color inconsistency between form and history, no delete
+      countdown/success toast, no filter/sort on history, no currency
+      symbol — deferred to Phase 7a) logged in
+      `.impeccable/critique/2026-08-12T10-41-37Z__src-features-log-bet.md`
+      for a later pass.
 
 ## Phase 3 — Dashboard
 

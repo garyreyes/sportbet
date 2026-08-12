@@ -1,5 +1,20 @@
 ## Unreleased
 
+### 2026-08-12 — Phase 2 design critique + correctness fixes
+Ran the Phase 2 Impeccable checkpoint (dual-agent critique) on the Log
+tab. Fixed the two correctness issues from the findings: the Projected
+Profit readout was hardcoded to a win-scenario calculation regardless of
+the selected status, so marking a bet Loss or Push still showed a
+positive win amount — now it reflects the actual selected status and
+relabels once a bet is settled. Also fixed a real data-integrity bug the
+review surfaced: editing an old bet after its custom sport/league had
+been deleted could silently save a different league than the one
+actually recorded, because the dropdown had no matching option; the
+bet's own sport/league is now guaranteed to remain selectable regardless
+of custom-entry deletions. Remaining findings (field labels, status-color
+consistency, delete confirmation feedback, history filtering, currency
+display) are logged for a later pass rather than bundled into this one.
+
 ### 2026-08-12 — History Rail + Add Sport/League (Phase 2c)
 Bet History can now be minimized to a two-icon rail (expand, add
 sport/league) instead of always showing the full list. Added an "Add
