@@ -20,18 +20,30 @@ policy recovered below, for no benefit. Only the frontend gets rebuilt.
 
 ## Entities
 
+> Verified against the live schema on 2026-08-12 via a direct `pg_dump`
+> (see "Schema drift note" below) — this section reflects the database as
+> it actually is today, not `MIGRATION_EXTRACTION.md`'s original
+> description, which had drifted out of date.
+
 - **Profile** (`profiles`) — one per auth user. `id` (= `auth.users.id`),
-  `username`, `display_name`, `avatar_url`, `currency`, `hide_overall_pnl`,
-  `hide_overall_winrate`, `hide_week_stats`, `hide_month_stats`,
-  `hide_today_stats`, `created_at`. (Unit value, odds format, date format,
-  and theme choice also live here or in a small prefs extension —
-  confirm current column set against live schema before first migration.)
+  `full_name`, `email`, `currency`, `avatar_url`, `theme_main`,
+  `theme_accent` (hex colors — the Custom-theme two-color picker's storage
+  already exists), `hide_overall_pnl`, `hide_week_pnl`, `hide_month_pnl`,
+  `hide_today_pnl`, `hide_win_rate` (one win-rate toggle total, not
+  per-period), `created_at`. No separate `username`/`display_name` split —
+  `full_name` is the only name field. (Unit value, odds format, date
+  format prefs still need a home — likely new columns here, decide when
+  building Settings.)
 - **Bet** (`bets`) — one per logged wager, owned by a Profile. `id`,
-  `user_id`, `date` (plain `YYYY-MM-DD`, local), `sport`, `league`, `pick`,
-  `odds` (decimal, canonical), `stake`, `status` (`win`/`loss`/`push`/
-  `pending`), `confidence`, `num_legs` (derived, never hand-entered),
-  `legs` (jsonb array of `{sport, league, pick}`, null for straight bets),
-  `created_at` (tiebreaker sort for same-day bets).
+  `user_id`, `sport`, `league`, `pick`, `odds` (decimal, canonical),
+  `stake`, `status` (`win`/`loss`/`push`/`pending`), `date` (plain
+  `YYYY-MM-DD`, local), `legs` (jsonb array of `{sport, league, pick}`,
+  null for straight bets), `created_at` (tiebreaker sort for same-day
+  bets). **No `confidence`, `prep_time_mins`, or `num_legs` columns** —
+  these were removed from the live schema; the Bet Form (Phase 2a) drops
+  the confidence star rating entirely, and `num_legs` stays purely
+  client-derived from `legs.length` (or `1` for a straight bet), never
+  stored, which is actually what the original doc intended anyway.
 - **Group** (`groups`) — `id`, `name`, `owner_id` (→ Profile), `invite_code`,
   `created_at`.
 - **GroupMember** (`group_members`) — join table between Group and Profile.
@@ -59,19 +71,28 @@ this explicit either way rather than silently guessing.
 
 ## Server-side logic (already live in Supabase — reused, not rewritten)
 
-Carried forward as-is via the first Supabase CLI migration (`supabase db
-pull`), with one deliberate change:
+Captured as two baseline migrations (`supabase/migrations/2026...`) via a
+direct `pg_dump` against the live database, since `supabase db pull`
+needs Docker (not available on this machine) — see "Schema drift note"
+below for how this was done and what it found.
 
 - `calculate_bet_profit`, `handle_new_group`, `is_group_member`,
-  `is_group_owner`, `shares_group_with`, `join_group_by_invite_code` —
-  unchanged.
+  `is_group_owner`, `shares_group_with` — unchanged from the original doc.
+- `join_group_by_invite_code` — now returns just the new group's `uuid`
+  (not a `{id, name}` pair like the doc described). The Groups feature
+  should navigate to the group list and let it re-fetch, rather than
+  expect a name back from this call.
 - `handle_new_user` — becomes the **sole** owner of profile creation on
   signup (decision below). The client-side `ensureProfile()` upsert is
-  **removed**, not duplicated.
-- `get_group_leaderboard` — its week boundary changes from
-  `date_trunc('week', ...)` to match whatever single "week" definition is
-  chosen in the unification pass (decision below), so client and server
-  agree for the first time.
+  **removed**, not duplicated. Note it no longer sets `avatar_url` on
+  signup (only `full_name`/`email`) — a new user's avatar is blank until
+  they upload one in Settings.
+- `get_group_leaderboard` — **already uses rolling windows** (`now() -
+  interval '6 days'`, `now() - interval '29 days'`), not the
+  `date_trunc('week', ...)` calendar week the original doc described.
+  This means the three-conflicting-"week"-definitions problem the doc
+  flagged is already resolved server-side — see the updated decision
+  below instead of unifying to calendar week.
 
 ## Decisions
 
@@ -82,27 +103,62 @@ pull`), with one deliberate change:
   refresh preserves the current tab instead of always resetting to
   Dashboard; invite links (`?invite=CODE`) can deep-link straight to
   `/groups` after auto-join instead of relying on ad hoc state-switching.
-- **"Week" definitions:** Unify to one meaning everywhere — calendar week
-  (Monday start, Asia/Manila) — instead of the three different, colliding
-  definitions in the original (client rolling-7-day filters, client
-  calendar-month goal, server `date_trunc('week', ...)`). Rolling-window
-  filters get relabeled "Past 7 Days" to stop colliding with "week"
-  terminology; `get_group_leaderboard`'s week column and any client "week"
-  UI now mean the same calendar week.
+- **"Week" definitions:** *(revised after the 2026-08-12 schema check —
+  `get_group_leaderboard` no longer uses calendar weeks, so the original
+  "unify to calendar week" plan is moot.)* The live leaderboard function
+  already uses rolling windows (7-day, 30-day back from today), matching
+  the client's rolling-filter semantics — no SQL change needed. The only
+  remaining work is a labeling pass: use "Past 7 Days"/"Past 30 Days"
+  consistently across Dashboard, Analytics, and the leaderboard instead of
+  "week"/"month", so the UI stops implying a calendar-aligned period that
+  isn't actually happening anywhere. The Monthly Goal progress bar is the
+  one place a real calendar month still applies (`YYYY-MM` prefix match)
+  and should keep that distinct label.
 - **Profile creation:** DB trigger (`handle_new_user`) only. Client no
   longer upserts a profile row on auth state change — removes the
   two-independent-mechanisms race the original had.
 - **Migrations:** Supabase CLI migrations from day one
-  (`supabase/migrations/*.sql`, committed to git). First migration is a
-  `supabase db pull` snapshot of the live schema (tables, functions,
-  triggers, RLS policies) so history starts accurate instead of from zero
-  — this was the single biggest structural risk flagged in
-  `MIGRATION_EXTRACTION.md`.
+  (`supabase/migrations/*.sql`, committed to git). First two migrations
+  are a `pg_dump` snapshot of the live schema (tables, functions, RLS
+  policies, storage/auth pieces) so history starts accurate instead of
+  from zero — this was the single biggest structural risk flagged in
+  `MIGRATION_EXTRACTION.md`. Both are marked `applied` in Supabase's
+  remote migration history (`supabase migration repair ... --status
+  applied`), so a future `supabase db push` won't try to re-run them.
 - **Auth:** Supabase Auth, Google + GitHub OAuth only (unchanged) — both
   sign-in buttons stay fixed-brand-color, not theme-reactive.
 - **Timezone:** All group-leaderboard date-boundary math stays hardcoded
   to `Asia/Manila`, matching the primary user base — not derived from each
   viewer's own locale (unchanged, confirmed intentional).
+
+## Schema drift note (2026-08-12)
+
+When seeding the migration baseline (Phase 1b), `supabase db pull` failed
+— it shells out to Docker internally, which isn't installed on this
+machine. Worked around it with a direct `pg_dump`/`psql` connection via
+Supabase's IPv4 connection pooler (the direct `db.<ref>.supabase.co` host
+is IPv6-only and unreachable from here) using a personal access token and
+the database password, neither committed anywhere.
+
+The resulting dump revealed the live schema had drifted from
+`MIGRATION_EXTRACTION.md`'s description — confirmed with the user as
+intentional recent changes made directly against the live database (the
+exact "manual SQL paste, never tracked" pattern the doc itself warned
+about). Differences are folded into the Entities and Decisions sections
+above rather than listed twice here; the summary is: `bets` lost
+`confidence`/`prep_time_mins`/`num_legs`, `profiles` was restructured
+(`full_name`/`email` replace `username`/`display_name`, new
+`theme_main`/`theme_accent` columns, privacy toggles simplified to one
+`hide_win_rate`), and `get_group_leaderboard` now uses rolling windows
+instead of calendar weeks. Also found: duplicate (functionally identical)
+avatar storage policies — captured as-is in the baseline migration,
+flagged as cleanup debt, not touched.
+
+This is the reason the "Verified against the live schema" note appears on
+the Entities section — going forward, treat the live database as ground
+truth over any older doc if the two ever disagree again, and re-verify
+schema-dependent assumptions before starting a phase that touches a table
+directly (Log, Groups, Settings especially).
 
 ## Security baseline (Supabase + RLS)
 
