@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { calculateProfit } from '../../shared/utils/profit'
 import { STATUS_TEXT_COLOR } from '../../shared/utils/statusColor'
-import { cardClass, focusRing } from '../../shared/styles'
+import { cardClass, focusRingOnSurface } from '../../shared/styles'
 import { BetForm } from './BetForm'
 import type { Bet, BetInput } from './types'
 
@@ -56,7 +56,7 @@ export function BetHistoryRow({
       <button
         type="button"
         onClick={() => setExpanded((v) => !v)}
-        className={`flex w-full items-center justify-between rounded-xl p-4 text-left text-sm transition-colors hover:bg-slate-800/60 ${focusRing}`}
+        className={`flex w-full items-center justify-between rounded-xl p-4 text-left text-sm transition-colors hover:bg-slate-800/60 ${focusRingOnSurface}`}
       >
         <div className="flex flex-col gap-0.5">
           <span className="font-medium">{label}</span>
@@ -75,7 +75,7 @@ export function BetHistoryRow({
               void handleDeleteClick()
             }}
             disabled={deleting}
-            className={`rounded-lg px-2.5 py-1.5 text-xs font-medium transition-colors ${focusRing} ${
+            className={`rounded-lg px-2.5 py-1.5 text-xs font-medium transition-colors ${focusRingOnSurface} ${
               confirmingDelete
                 ? 'bg-red-600 text-white shadow-sm shadow-red-950/40'
                 : 'bg-slate-800 text-red-300 hover:bg-red-900/40'

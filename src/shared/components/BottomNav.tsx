@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom'
-import { focusRing } from '../styles'
+import { focusRingOnSurface } from '../styles'
 
 const TABS = [
   { to: '/dashboard', label: 'Dashboard' },
@@ -18,7 +18,7 @@ export function BottomNav() {
           key={tab.to}
           to={tab.to}
           className={({ isActive }) =>
-            `flex flex-col items-center justify-center py-3 text-xs transition-colors ${focusRing} ${
+            `flex flex-col items-center justify-center py-3 text-xs transition-colors ${focusRingOnSurface} ${
               isActive ? 'font-semibold text-emerald-400' : 'text-slate-400 hover:text-slate-200'
             }`
           }

@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { calculateProfit } from '../../shared/utils/profit'
 import { filterSettled } from '../../shared/utils/betFilters'
-import { cardClass, focusRing, inputClass, primaryButtonClass, secondaryButtonClass } from '../../shared/styles'
+import { cardClass, focusRingOnSurface, inputClass, primaryButtonClass, secondaryButtonClass } from '../../shared/styles'
 import type { Bet } from '../../shared/types/bet'
 import { updateMonthlyGoal, useMonthlyGoal } from './api'
 
@@ -59,14 +59,17 @@ export function MonthlyGoalCard({ userId, bets }: { userId: string; bets: Bet[] 
   return (
     <div className={`flex flex-1 flex-col gap-3 p-5 ${cardClass}`}>
       <div className="flex items-center justify-between">
-        <span className="text-xs font-medium uppercase tracking-wide text-slate-500">
-          Monthly Goal
-        </span>
+        <div className="flex items-baseline gap-2">
+          <span className="text-xs font-medium uppercase tracking-wide text-slate-500">
+            Monthly Goal
+          </span>
+          <span className="text-[10px] text-slate-600">This calendar month</span>
+        </div>
         {!editing && (
           <button
             type="button"
             onClick={startEditing}
-            className={`rounded px-1 text-xs text-slate-400 transition-colors hover:text-slate-200 ${focusRing}`}
+            className={`rounded px-1.5 py-1 text-xs text-slate-400 transition-colors hover:text-slate-200 ${focusRingOnSurface}`}
           >
             Edit
           </button>

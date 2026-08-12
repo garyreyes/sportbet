@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { dangerButtonClass, focusRing, inputClass, primaryButtonClass } from '../../shared/styles'
+import { dangerButtonClass, focusRingOnSurface, inputClass, primaryButtonClass } from '../../shared/styles'
 import {
   createCustomSportLeague,
   deleteCustomSportLeague,
@@ -79,7 +79,7 @@ export function AddSportLeagueModal({
           <button
             type="button"
             onClick={onClose}
-            className={`rounded px-1 text-sm text-slate-400 transition-colors hover:text-slate-200 ${focusRing}`}
+            className={`rounded px-1 text-sm text-slate-400 transition-colors hover:text-slate-200 ${focusRingOnSurface}`}
           >
             Close
           </button>
@@ -138,7 +138,7 @@ export function AddSportLeagueModal({
                 <button
                   type="button"
                   onClick={() => void handleDelete(entry.id)}
-                  className={`rounded px-1.5 py-0.5 transition-colors ${focusRing} ${dangerButtonClass}`}
+                  className={`rounded px-1.5 py-0.5 transition-colors ${focusRingOnSurface} ${dangerButtonClass}`}
                 >
                   Remove
                 </button>

@@ -10,7 +10,10 @@ export function StreakCard({ bets }: { bets: Bet[] }) {
 
   return (
     <div className={`flex flex-1 flex-col gap-2 p-5 ${cardClass}`}>
-      <span className="text-xs font-medium uppercase tracking-wide text-slate-500">{label}</span>
+      <div className="flex items-baseline justify-between">
+        <span className="text-xs font-medium uppercase tracking-wide text-slate-500">{label}</span>
+        <span className="text-[10px] text-slate-600">All time</span>
+      </div>
       <span className={`text-3xl font-semibold ${color}`}>{type === null ? '—' : count}</span>
     </div>
   )

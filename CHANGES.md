@@ -1,5 +1,21 @@
 ## Unreleased
 
+### 2026-08-12 — Phase 3 design critique + fixes
+Ran the Phase 3 Impeccable checkpoint on Dashboard, scored 24/40. Fixed a
+real bug the recent depth pass introduced: the shared `focusRing` token
+hardcoded a page-level ring-offset color, so keyboard focus on any button
+sitting inside a card or modal (Monthly Goal's Edit/Save/Cancel, the
+Profit Chart view toggles, a bet row's Delete button, the Add Sport/League
+modal) showed a visibly mismatched notch instead of a clean ring. Split
+into `focusRing` (page-level) and `focusRingOnSurface` (card/modal/nav
+level) and applied the correct one everywhere. Also added visible "All
+time"/"This calendar month" captions to the Streak and Monthly Goal cards,
+since they silently don't respond to the time-range tabs sitting directly
+below them while Metrics and the chart do — the critique flagged this as
+a real recognition-vs-recall gap, not just polish. Remaining findings
+(metric grid hierarchy/ordering, number formatting, error retry) logged
+for a later pass.
+
 ### 2026-08-12 — Profit Chart (Phase 3b) + shared UI depth pass
 Dashboard's Profit Chart is live: Cumulative (running total, line),
 Per Bet (status-colored bars), and Daily (bars diverging around zero),
