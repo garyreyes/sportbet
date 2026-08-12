@@ -1,5 +1,20 @@
 ## Unreleased
 
+### 2026-08-12 — Analytics: Rolling Form Trend + Stake Discipline (Phase 5c)
+Two more Analytics charts, with a scope change confirmed with the user
+first: Confidence Calibration is dropped from this sub-phase entirely,
+since the confidence rating it needs doesn't exist in the live schema
+(removed deliberately back in Phase 1b) — re-adding it was considered
+and declined rather than silently reopened. Rolling Form Trend plots win
+rate over a trailing 10-decisive-bet window as a line. Stake Discipline
+plots stake per bet against a running average stake, so sizing-up spikes
+(e.g. chasing a loss) are visually obvious without needing a
+bankroll/balance concept the app doesn't track. Extracted
+`shared/utils/chartTheme.ts` and `shared/components/ChartTooltip.tsx` out
+of `ProfitChart` since this is now the third and fourth chart needing the
+identical dark-theme axis/grid/tooltip treatment. Verified in a real
+browser against the real account.
+
 ### 2026-08-12 — Analytics: Leg Breakdown, Bet Type Comparison, Parlay Sport Composition (Phase 5b)
 Three more Analytics panels. Leg Breakdown groups decisive parlays by
 leg count (2/3/4/5/6+, folding the long tail like the odds buckets do)

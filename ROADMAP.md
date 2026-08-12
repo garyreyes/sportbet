@@ -169,8 +169,19 @@ item below.
       percentages. Extracted `WinRateRows` out of `WinRateList` so
       Leg Breakdown's collapsible variant didn't duplicate the row
       markup.
-- [ ] **5c. Confidence Calibration + Rolling Form Trend + Stake Discipline**
-      — not started.
+- [x] **5c. Rolling Form Trend + Stake Discipline** — done. **Scope
+      change confirmed with the user:** Confidence Calibration dropped
+      entirely — the `confidence` rating column doesn't exist in the
+      live schema (removed per Phase 1b's drift correction, Bet Form
+      already built without it); re-adding it was considered and
+      declined rather than silently reopened. Rolling Form Trend: win
+      rate over a trailing 10-decisive-bet window, line chart. Stake
+      Discipline: stake per bet (bars) against a running average stake
+      (line) — a proxy for "am I sizing up after losses" without a
+      bankroll concept the app doesn't track. Extracted
+      `shared/utils/chartTheme.ts` and `shared/components/ChartTooltip.tsx`
+      out of `ProfitChart` since this is now the third/fourth chart
+      needing the identical dark-theme treatment.
 - [ ] **5d. Monte Carlo Simulation** — not started. Bootstrap resampling,
       500 trials, 5-bet minimum guard, Both/Straight/Parlay filter.
 - [ ] **5e. AI Coach Panel** — not started. Ranked insight list, tuned
