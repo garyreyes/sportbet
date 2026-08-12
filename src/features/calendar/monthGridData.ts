@@ -37,3 +37,22 @@ export function computeDailyTotals(bets: Bet[], forMonthPrefix: string): Map<str
   }
   return totals
 }
+
+/**
+ * Days with at least one bet logged but no settled total (i.e. every bet
+ * that day is still pending) — these must render differently from a day
+ * with no bets at all, or the grid silently claims "nothing happened"
+ * on a day that actually has open action.
+ */
+export function computeDaysWithOnlyPending(
+  bets: Bet[],
+  forMonthPrefix: string,
+  dailyTotals: Map<string, number>,
+): Set<string> {
+  const days = new Set<string>()
+  for (const bet of bets) {
+    if (!bet.date.startsWith(forMonthPrefix)) continue
+    if (!dailyTotals.has(bet.date)) days.add(bet.date)
+  }
+  return days
+}

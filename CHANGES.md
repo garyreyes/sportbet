@@ -1,5 +1,19 @@
 ## Unreleased
 
+### 2026-08-12 — Phase 4 design critique + fixes
+Ran the Phase 4 Impeccable checkpoint on Calendar, scored 26/40. Fixed
+the P0: a day with only pending bets (no settled ones) rendered as an
+identical neutral gray cell to a day with no bets logged at all, while
+tapping either could reveal the day panel showed unfiltered bets —
+tapping an apparently "empty" day could silently surface pending
+activity the cell gave no hint of. Day cells with pending-only activity
+now carry a small amber dot. Also added full `aria-label`s to all 42 day
+cells (previously just the bare day number, giving screen reader users
+zero information about outcome or activity). Confirmed the Phase 3
+`focusRingOnSurface` fix wasn't regressed by this new code. Remaining
+findings (no magnitude encoding in cell color, misleading "0.00" on an
+empty month, no legend) logged for a later pass.
+
 ### 2026-08-12 — Calendar (Phase 4a)
 Calendar tab is live: a month grid with day cells colored by that day's
 net settled profit (sign-based, matching the Dashboard chart's Daily
