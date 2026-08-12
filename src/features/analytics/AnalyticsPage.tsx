@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useBetsContext } from '../../shared/bets/useBetsContext'
 import { TimeRangeTabs } from '../../shared/components/TimeRangeTabs'
 import { TIME_RANGES, filterByRange, type TimeRange } from '../../shared/utils/timeRanges'
+import { AICoachPanel } from './AICoachPanel'
 import { BetTypeComparison } from './BetTypeComparison'
 import { CategoryWinRates } from './CategoryWinRates'
 import { LegBreakdown } from './LegBreakdown'
@@ -22,6 +23,7 @@ export function AnalyticsPage() {
 
   return (
     <div className="mx-auto flex max-w-2xl flex-col gap-4 p-4 pb-8 sm:p-6">
+      <AICoachPanel bets={bets} />
       <TimeRangeTabs value={range} onChange={setRange} />
       <CategoryWinRates bets={rangedBets} />
       <OddsRangeBreakdown bets={rangedBets} />

@@ -207,11 +207,30 @@ item below.
       `.impeccable/critique/2026-08-12T14-29-53Z__src-features-analytics.md`.
       Full Phase 5 critique (including 5e) still to come once AI Coach
       ships.
-- [ ] **5e. AI Coach Panel** — not started. Ranked insight list, tuned
-      thresholds (min 3 decisive bets, ≥15pp gap, ≥3-bet streaks).
+- [x] **5e. AI Coach Panel** — done. Ranked insight list (streak,
+      best/worst league gap, best/worst odds-bucket gap, Straight vs
+      Parlay gap), tuned thresholds per `MIGRATION_EXTRACTION.md` §8 (min
+      3 decisive bets per group, ≥15pp win-rate gap, ≥3-bet streak),
+      one-line count summary at top, expandable past the first 4, empty
+      state below threshold. Reuses existing computation entirely
+      (`calculateStreak`, `computeCategoryWinRates`,
+      `computeOddsBucketWinRates`, `computeBetTypeComparison`) — no new
+      data pattern. Deliberately does **not** carry over the old "prep
+      time paying off" insight (§"Don't carry over" #5 — the underlying
+      field doesn't exist in this schema). Placed at the top of Analytics
+      and, like Monte Carlo, uses full history rather than the shared
+      time-range tabs (confirmed with the user) since its thresholds need
+      more sample than a narrow range would leave. Also added a `profit`
+      figure alongside win rate on the four win-rate panels (Category,
+      Odds Range, Leg Breakdown, Bet Type Comparison) per live user
+      feedback after seeing the plain win-rate bars — `GroupWinRate` now
+      carries `profit`, computed the same way as everywhere else via
+      `calculateProfit`. Parlay Sport Composition intentionally excluded
+      (frequency count, not a per-bet outcome — no clean profit
+      attribution per leg).
 - [ ] **Impeccable critique + polish (Phase 5)** — not started. Run once
-      5a–5e are all done — five sub-phases sharing one tab, review as one
-      cohesive surface.
+      5a–5e are all done (they are) — five sub-phases sharing one tab,
+      review as one cohesive surface.
 
 ## Phase 6 — Groups
 

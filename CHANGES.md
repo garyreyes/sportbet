@@ -1,5 +1,21 @@
 ## Unreleased
 
+### 2026-08-12 — Analytics: AI Coach Panel + profit on win-rate panels (Phase 5e)
+Final Analytics sub-phase. AI Coach Panel: ranked, plain-language insight
+list (streak, best/worst league win-rate gap, best/worst odds-bucket
+gap, Straight vs Parlay gap), tuned thresholds recovered from the legacy
+app (min 3 decisive bets per group, ≥15pp win-rate gap, ≥3-bet streak),
+one-line summary, expandable past the first 4. Built entirely on top of
+existing computation (`calculateStreak`, `computeCategoryWinRates`,
+`computeOddsBucketWinRates`, `computeBetTypeComparison`) rather than a
+new engine. Deliberately skips the legacy "prep time paying off"
+insight since the underlying field doesn't exist in this schema.
+Placed at the top of the page and, like Monte Carlo, scoped to full
+history rather than the shared time-range tabs. Separately, added a
+profit figure alongside win rate on Category Win Rates, Win Rate by
+Odds Range, Leg Breakdown, and Bet Type Comparison, per live feedback
+after seeing the plain win-rate-only bars.
+
 ### 2026-08-12 — Analytics: Phase 5 critique fixes + Monte Carlo polish
 Dual-agent Impeccable critique of the Analytics tab (5a–5d together)
 scored ~21/40 with two P0s, both fixed: `TimeRangeTabs` gained a
