@@ -1,5 +1,18 @@
 ## Unreleased
 
+### 2026-08-12 — Bet History (Phase 2b)
+Log tab now lists every logged bet (most recent first), each expandable
+into the same `BetForm` used to create it for inline editing, plus delete
+with an inline "tap again to confirm" step since deletion is permanent.
+Introduced `useBets()` and lifted it to `LogPage` so the form and the
+list share one fetch instead of the list going stale after a new bet is
+saved — this is the pattern Dashboard/Calendar/Analytics will reuse once
+they need the same data. Caught and fixed two bugs before shipping: the
+new-bet and every open edit row were sharing one localStorage draft key
+(scoped it per-bet-id instead), and a failed delete had no visible error
+(now surfaces one instead of failing silently). Verified end-to-end
+against the real account: create, edit, and delete all confirmed working.
+
 ### 2026-08-12 — Bet Form (Phase 2a)
 Log tab now has a working Bet Form: Single/Parlay toggle, dynamic leg
 list for parlays, decimal odds, stake, a live Projected Profit readout,
