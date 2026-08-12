@@ -346,9 +346,20 @@ item below.
 
 ## Phase 7 — Settings
 
-- [ ] **7a. Account + Preferences** — not started. Avatar upload, display
-      name autosave-on-blur, sign out; currency picker, odds format
-      (American/Decimal), date format.
+- [x] **7a. Account + Preferences** — done. Account: avatar upload
+      (camera-icon overlay on the avatar circle, first Storage upload
+      code in the rebuild — client-side type/size checks are just fast
+      feedback, real enforcement is server-side via the `avatars`
+      bucket's MIME allowlist + 5MB cap, closing Security Baseline open
+      item #16), display name autosave-on-blur, sign out. Preferences:
+      currency picker (preset symbols + custom), odds format
+      (Decimal/American), date format — three new `profiles` columns
+      (`odds_format`, `date_format`; `currency` already existed).
+      **Scope decision confirmed with the user:** this sub-phase only
+      saves the three format preferences — actually reformatting
+      odds/currency/dates across the ~10+ existing display sites
+      (BetForm, BetHistoryRow, Calendar, Analytics, etc.) is deferred to
+      a dedicated follow-up pass rather than bundled in here.
 - [ ] **7b. Unit Value + Appearance** — not started. "1 unit = $X"
       reference value; 5 themes (Dark Slate, OLED Black, Dark Emerald,
       Light, Custom with two-color derivation).
