@@ -28,8 +28,11 @@ Status values: `not started` / `in progress` / `done`.
       note). Built as a reusable `BetForm` (optional `initialBet` +
       `onSubmit`) so Phase 2b's edit flow can reuse it without
       duplicating the form.
-- [ ] **2b. Bet History** — not started. List of logged bets, inline edit
-      (reuses the Bet Form component, parameterized new-vs-editing), delete.
+- [x] **2b. Bet History** — done. List of logged bets (reuses `BetForm`
+      for inline edit), delete with inline "tap again to confirm".
+      `useBets()` introduced and lifted to `LogPage` so the form and list
+      share one fetch — the single-source-of-truth pattern Dashboard/
+      Calendar/Analytics will reuse later.
 - [ ] **2c. History Rail + Add Sport/League modal** — not started.
       Minimized icon-rail state of Bet History; modal for custom
       sport/league entries.

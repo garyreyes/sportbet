@@ -5,9 +5,7 @@ import { useEffect, useState } from 'react'
  * Loading merges the saved draft over `initial` so a draft saved before a
  * field existed doesn't silently omit it.
  */
-export function useDraft<T extends object>(userId: string, initial: T) {
-  const key = `bet-draft:${userId}`
-
+export function useDraft<T extends object>(key: string, initial: T) {
   const [value, setValue] = useState<T>(() => {
     const saved = localStorage.getItem(key)
     if (!saved) return initial

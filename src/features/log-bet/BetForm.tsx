@@ -64,7 +64,7 @@ interface BetFormProps {
 
 export function BetForm({ userId, initialBet, onSubmit }: BetFormProps) {
   const [draft, setDraft, clearDraft] = useDraft<DraftState>(
-    userId,
+    `bet-draft:${userId}:${initialBet?.id ?? 'new'}`,
     initialBet ? fromBet(initialBet) : defaultDraft(),
   )
   const [error, setError] = useState<string | null>(null)
