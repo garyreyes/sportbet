@@ -104,8 +104,20 @@ item below.
       was already being touched). Deliberately scoped to structure, not
       new colors — Phase 7b's real theming re-skins this, doesn't
       replace it.
-- [ ] **Impeccable critique + polish (Phase 3)** — not started. Run once
-      3a/3b are both done — review Metrics + chart together.
+- [x] **Impeccable critique + polish (Phase 3)** — done. Dual-agent
+      critique scored 24/40 (Acceptable band). Fixed the two P1/correctness
+      issues chosen for this pass: `focusRingOnSurface` split from
+      `focusRing` (the shared button/input tokens had hardcoded a
+      page-level ring-offset color that showed a mismatched notch on
+      every button sitting inside a card/modal — a bug the depth pass
+      itself introduced); Streak and Monthly Goal cards now carry visible
+      "All time"/"This calendar month" captions since they don't respond
+      to the time-range tabs sitting directly below them, unlike Metrics
+      and the chart. Remaining findings (MetricGrid has no internal
+      hierarchy and ends on Biggest Loss, money values unformatted, no
+      retry on load error, goal input unlabeled) logged in
+      `.impeccable/critique/2026-08-12T11-38-13Z__src-features-dashboard.md`
+      for a later pass.
 
 ## Phase 4 — Calendar
 

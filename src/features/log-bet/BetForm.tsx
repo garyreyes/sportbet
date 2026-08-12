@@ -2,7 +2,7 @@ import { useMemo, useState } from 'react'
 import { calculateProfit } from '../../shared/utils/profit'
 import { toLocalDateKey } from '../../shared/utils/date'
 import { STATUS_TEXT_COLOR } from '../../shared/utils/statusColor'
-import { focusRing, inputClass, primaryButtonClass, secondaryButtonClass } from '../../shared/styles'
+import { focusRingOnSurface, inputClass, primaryButtonClass, secondaryButtonClass } from '../../shared/styles'
 import { LegEditor } from './LegEditor'
 import { useDraft } from './useDraft'
 import {
@@ -280,7 +280,7 @@ export function BetForm({ userId, sportLeagues: baseSportLeagues, initialBet, on
             key={status}
             type="button"
             onClick={() => update({ status })}
-            className={`flex-1 rounded-lg py-2 text-xs font-medium capitalize transition-colors ${focusRing} ${
+            className={`flex-1 rounded-lg py-2 text-xs font-medium capitalize transition-colors ${focusRingOnSurface} ${
               draft.status === status
                 ? STATUS_SELECTED_CLASS[status]
                 : `bg-slate-800 hover:bg-slate-700 ${STATUS_TEXT_COLOR[status]}`

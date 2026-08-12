@@ -19,7 +19,7 @@ import {
   perBetSeries,
 } from '../../shared/utils/profitSeries'
 import { STATUS_HEX } from '../../shared/utils/statusColor'
-import { cardClass, focusRing } from '../../shared/styles'
+import { cardClass, focusRingOnSurface } from '../../shared/styles'
 import type { Bet } from '../../shared/types/bet'
 
 const VIEWS = ['Cumulative', 'Per Bet', 'Daily'] as const
@@ -54,7 +54,7 @@ export function ProfitChart({ bets }: { bets: Bet[] }) {
             key={v}
             type="button"
             onClick={() => setView(v)}
-            className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${focusRing} ${
+            className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-colors ${focusRingOnSurface} ${
               view === v
                 ? 'bg-emerald-600 text-white shadow-sm shadow-emerald-950/40'
                 : 'bg-slate-800 text-slate-300 hover:bg-slate-700 hover:text-slate-100'
