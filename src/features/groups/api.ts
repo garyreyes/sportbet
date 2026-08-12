@@ -1,5 +1,5 @@
 import { supabase } from '../../lib/supabaseClient'
-import type { Group, GroupPreview, GroupWithMembers } from './types'
+import type { Group, GroupPreview, GroupWithMembers, LeaderboardRow } from './types'
 
 /** Owner is added to group_members by the handle_new_group trigger — no client insert needed. */
 export async function createGroup(userId: string, name: string): Promise<Group> {
@@ -42,21 +42,6 @@ export async function joinGroupByInviteCode(inviteCode: string): Promise<string>
   }
 
   return data
-}
-
-/** Used only to decide the Join/Create card's default expanded/collapsed state. */
-export async function getGroupCount(userId: string): Promise<number> {
-  const { count, error } = await supabase
-    .from('group_members')
-    .select('id', { count: 'exact', head: true })
-    .eq('user_id', userId)
-
-  if (error) {
-    console.error('getGroupCount failed:', error)
-    return 0
-  }
-
-  return count ?? 0
 }
 
 /**
@@ -146,4 +131,16 @@ export async function removeMember(groupId: string, userId: string): Promise<voi
     console.error('removeMember failed:', error)
     throw new Error('Could not remove that member. Please try again.')
   }
+}
+
+/** Privacy toggles are already applied server-side — hidden stats come back null, no client-side hiding needed. */
+export async function getGroupLeaderboard(groupId: string): Promise<LeaderboardRow[]> {
+  const { data, error } = await supabase.rpc('get_group_leaderboard', { p_group_id: groupId })
+
+  if (error || !data) {
+    console.error('getGroupLeaderboard failed:', error)
+    throw new Error('Could not load the leaderboard. Please try again.')
+  }
+
+  return data
 }

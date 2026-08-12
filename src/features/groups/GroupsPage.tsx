@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { useAuth } from '../auth/useAuth'
-import { getGroupCount } from './api'
+import { getUserGroups } from './api'
 import { InviteJoinPrompt } from './InviteJoinPrompt'
 import { JoinCreateCard } from './JoinCreateCard'
+import { Leaderboard } from './Leaderboard'
+import type { GroupWithMembers } from './types'
 import { YourGroupsList } from './YourGroupsList'
 
 export function GroupsPage() {
@@ -11,15 +13,21 @@ export function GroupsPage() {
   const userId = session?.user.id
   const [searchParams, setSearchParams] = useSearchParams()
   const [inviteCode, setInviteCode] = useState(searchParams.get('invite'))
-  const [groupCount, setGroupCount] = useState<number | null>(null)
+  const [groups, setGroups] = useState<GroupWithMembers[] | null>(null)
+  const [groupsError, setGroupsError] = useState<string | null>(null)
   const [refreshKey, setRefreshKey] = useState(0)
 
   useEffect(() => {
     if (!userId) return
     let cancelled = false
-    getGroupCount(userId).then((count) => {
-      if (!cancelled) setGroupCount(count)
-    })
+    setGroupsError(null)
+    getUserGroups(userId)
+      .then((result) => {
+        if (!cancelled) setGroups(result)
+      })
+      .catch((err) => {
+        if (!cancelled) setGroupsError(err instanceof Error ? err.message : 'Could not load your groups.')
+      })
     return () => {
       cancelled = true
     }
@@ -46,19 +54,23 @@ export function GroupsPage() {
       {inviteCode && (
         <InviteJoinPrompt inviteCode={inviteCode} onJoined={handleJoined} onDismiss={clearInvite} />
       )}
-      {groupCount !== null && (
+      {groups !== null && (
         <JoinCreateCard
           userId={userId}
-          defaultExpanded={groupCount === 0}
+          defaultExpanded={groups.length === 0}
           onJoined={() => setRefreshKey((k) => k + 1)}
           onCreated={() => setRefreshKey((k) => k + 1)}
         />
       )}
       <YourGroupsList
         userId={userId}
-        refreshKey={refreshKey}
+        groups={groups}
+        error={groupsError}
         onChanged={() => setRefreshKey((k) => k + 1)}
       />
+      {groups !== null && groups.length > 0 && (
+        <Leaderboard currentUserId={userId} groups={groups} refreshKey={refreshKey} />
+      )}
     </div>
   )
 }

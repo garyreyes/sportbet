@@ -280,9 +280,31 @@ item below.
       client-side, since `group_members.user_id` references
       `auth.users`, not `profiles`, so PostgREST can't embed a profile
       join directly off it.
-- [ ] **6c. Leaderboard** — not started. `get_group_leaderboard` RPC,
-      group switcher, medal badges, hero stat with relative bar,
-      mixed-currency warning banner.
+- [x] **6c. Leaderboard** — done. Group switcher (dropdown select — the
+      user's choice over pill tabs, since this app has no existing
+      dropdown idiom yet and this was the natural place to introduce
+      one), shown only when the user belongs to more than one group.
+      Ranked rows sorted by overall profit descending, medals for the
+      top 3, own row highlighted, overall profit as a hero stat with a
+      bar relative to the group's top performer (reusing
+      `MonthlyGoalCard`'s track/fill pattern), Past 7 Days/Past 30
+      Days/Today as secondary stats per the rolling-window labeling
+      decision, mixed-currency warning banner when members'
+      `profiles.currency` differ. `get_group_leaderboard` already
+      existed and already applies privacy toggles server-side (hidden
+      stats come back `null`, viewer always sees their own numbers) —
+      no client-side hiding logic needed, and no schema change. Members
+      with a hidden overall profit can't be numerically ranked, so they
+      render below the ranked list with no medal/position. Added
+      `shared/utils/formatCurrency.ts` — the leaderboard is the first
+      surface where two different currency symbols can appear side by
+      side, where a bare number would actively mislead; scoped
+      narrowly to this panel, not a retrofit of every other panel's
+      still-bare numbers (that's Phase 7a's job). Refactored
+      `GroupsPage.tsx` to fetch the user's group list once and pass it
+      down to both `YourGroupsList` and `Leaderboard`, replacing 6b's
+      standalone `getGroupCount` (now deleted) so the two panels don't
+      duplicate the same fetch.
 - [ ] **6d. Privacy Toggles** — not started. Per-stat visibility
       (overall P&L, overall win rate, week/month/today).
 - [ ] **Impeccable critique + polish (Phase 6)** — not started.
