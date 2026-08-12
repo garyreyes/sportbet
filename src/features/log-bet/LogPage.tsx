@@ -1,3 +1,17 @@
+import { useAuth } from '../auth/useAuth'
+import { BetForm } from './BetForm'
+import { createBet } from './api'
+import type { BetInput } from './types'
+
 export function LogPage() {
-  return <p className="p-4">Log — coming soon.</p>
+  const { session } = useAuth()
+  const userId = session?.user.id
+
+  if (!userId) return null
+
+  const handleSubmit = async (input: BetInput) => {
+    await createBet(userId, input)
+  }
+
+  return <BetForm userId={userId} onSubmit={handleSubmit} />
 }
