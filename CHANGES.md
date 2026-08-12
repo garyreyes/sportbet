@@ -1,5 +1,19 @@
 ## Unreleased
 
+### 2026-08-12 — Dashboard Metrics (Phase 3a)
+Dashboard tab is live: a Streak card and an editable Monthly Goal card
+(backed by a new `profiles.monthly_goal` column) sit above time-range
+tabs — Today / Past 7 Days / Past 30 Days / Past Year / All Time, the
+relabeled rolling windows from the Phase 1b schema-drift correction —
+which filter an 8-card metric grid (Net Profit, ROI, Win Rate, Wagers,
+Staked (Settled), Pending, Biggest Win, Biggest Loss). This is the first
+feature outside Log to need bet data, so `useBets()` moved from being
+local to `LogPage` into a shared `BetsProvider` wrapping the app layout —
+Dashboard and Log now genuinely share one fetch, matching the original
+app's "fetched once, every page derives its own view" rule. Verified
+end-to-end against the real account, including that a bet logged on the
+Log tab shows up on Dashboard immediately, no refresh needed.
+
 ### 2026-08-12 — Phase 2 design critique + correctness fixes
 Ran the Phase 2 Impeccable checkpoint (dual-agent critique) on the Log
 tab. Fixed the two correctness issues from the findings: the Projected

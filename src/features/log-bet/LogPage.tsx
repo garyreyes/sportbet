@@ -1,14 +1,15 @@
+import { useBetsContext } from '../../shared/bets/useBetsContext'
 import { useAuth } from '../auth/useAuth'
 import { BetForm } from './BetForm'
 import { BetHistory } from './BetHistory'
-import { createBet, sortBets, useBets } from './api'
+import { createBet, sortBets } from './api'
 import { useCustomSportLeagues } from './customSportLeagues'
 import { mergeSportLeagues, type BetInput } from './types'
 
 export function LogPage() {
   const { session } = useAuth()
   const userId = session?.user.id
-  const { bets, setBets, loading, error } = useBets(userId ?? '')
+  const { bets, setBets, loading, error } = useBetsContext()
   const { entries: customEntries, setEntries: setCustomEntries } = useCustomSportLeagues(
     userId ?? '',
   )
