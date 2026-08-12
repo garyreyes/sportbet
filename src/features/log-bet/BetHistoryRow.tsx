@@ -1,14 +1,9 @@
 import { useState } from 'react'
 import { calculateProfit } from '../../shared/utils/profit'
+import { STATUS_TEXT_COLOR } from '../../shared/utils/statusColor'
+import { cardClass, focusRing } from '../../shared/styles'
 import { BetForm } from './BetForm'
 import type { Bet, BetInput } from './types'
-
-const STATUS_COLOR: Record<Bet['status'], string> = {
-  win: 'text-emerald-400',
-  loss: 'text-red-400',
-  push: 'text-blue-400',
-  pending: 'text-slate-400',
-}
 
 interface BetHistoryRowProps {
   bet: Bet
@@ -57,18 +52,18 @@ export function BetHistoryRow({
   }
 
   return (
-    <div className="rounded-md border border-slate-800">
+    <div className={cardClass}>
       <button
         type="button"
         onClick={() => setExpanded((v) => !v)}
-        className="flex w-full items-center justify-between p-3 text-left text-sm"
+        className={`flex w-full items-center justify-between rounded-xl p-4 text-left text-sm transition-colors hover:bg-slate-800/60 ${focusRing}`}
       >
-        <div className="flex flex-col">
-          <span>{label}</span>
+        <div className="flex flex-col gap-0.5">
+          <span className="font-medium">{label}</span>
           <span className="text-xs text-slate-500">{bet.date}</span>
         </div>
         <div className="flex items-center gap-3">
-          <span className={STATUS_COLOR[bet.status]}>
+          <span className={`font-semibold ${STATUS_TEXT_COLOR[bet.status]}`}>
             {bet.status === 'pending' || bet.status === 'push'
               ? bet.status
               : profit.toFixed(2)}
@@ -80,8 +75,10 @@ export function BetHistoryRow({
               void handleDeleteClick()
             }}
             disabled={deleting}
-            className={`rounded-md px-2 py-1 text-xs ${
-              confirmingDelete ? 'bg-red-600' : 'bg-slate-800'
+            className={`rounded-lg px-2.5 py-1.5 text-xs font-medium transition-colors ${focusRing} ${
+              confirmingDelete
+                ? 'bg-red-600 text-white shadow-sm shadow-red-950/40'
+                : 'bg-slate-800 text-red-300 hover:bg-red-900/40'
             }`}
           >
             {confirmingDelete ? 'Confirm delete?' : 'Delete'}
@@ -89,7 +86,7 @@ export function BetHistoryRow({
         </div>
       </button>
 
-      {deleteError && <p className="px-3 pb-2 text-xs text-red-400">{deleteError}</p>}
+      {deleteError && <p className="px-4 pb-3 text-xs text-red-400">{deleteError}</p>}
 
       {expanded && (
         <div className="border-t border-slate-800">

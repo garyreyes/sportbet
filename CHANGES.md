@@ -1,5 +1,24 @@
 ## Unreleased
 
+### 2026-08-12 — Profit Chart (Phase 3b) + shared UI depth pass
+Dashboard's Profit Chart is live: Cumulative (running total, line),
+Per Bet (status-colored bars), and Daily (bars diverging around zero),
+all filtered by the same time-range tabs as the metric grid. Added
+Recharts as a new dependency and followed the project's `dataviz` skill
+for chart form, color, and mark decisions.
+
+Mid-build, direct feedback that the built screens felt too flat/skeletal
+prompted a shared styling pass rather than deferring it: added
+`shared/styles.ts` (card, button, input, focus-ring tokens) and applied
+it across every shared component and the Log/Dashboard/Auth screens —
+real shadows, a card surface distinct from the page background,
+hover/active states on every button (there were none before), and
+themed focus rings. Also closed two items already flagged in the Phase 2
+critique while `BetForm` was open anyway: missing labels on Sport/
+League/Pick, and the "Save bet"/"Update bet" button label. Scoped to
+structure, not new colors, since Phase 7b's real theming re-skins this
+rather than replacing it.
+
 ### 2026-08-12 — Dashboard Metrics (Phase 3a)
 Dashboard tab is live: a Streak card and an editable Monthly Goal card
 (backed by a new `profiles.monthly_goal` column) sit above time-range

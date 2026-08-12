@@ -1,5 +1,6 @@
 import type { Dispatch, SetStateAction } from 'react'
 import { useState } from 'react'
+import { cardClass, secondaryButtonClass } from '../../shared/styles'
 import { AddSportLeagueModal } from './AddSportLeagueModal'
 import { BetHistoryRow } from './BetHistoryRow'
 import { deleteBet, sortBets, updateBet } from './api'
@@ -33,11 +34,11 @@ export function BetHistory({
   if (!expanded) {
     return (
       <>
-        <div className="flex justify-end gap-2 p-4">
+        <div className={`flex justify-end gap-2 p-4 ${cardClass}`}>
           <button
             type="button"
             onClick={() => setExpanded(true)}
-            className="rounded-md bg-slate-800 px-3 py-2 text-sm"
+            className={`px-3 py-2 text-sm ${secondaryButtonClass}`}
             aria-label="Expand bet history"
           >
             History
@@ -45,7 +46,7 @@ export function BetHistory({
           <button
             type="button"
             onClick={() => setModalOpen(true)}
-            className="rounded-md bg-slate-800 px-3 py-2 text-sm"
+            className={`px-3 py-2 text-sm ${secondaryButtonClass}`}
             aria-label="Add sport or league"
           >
             + Sport
@@ -65,21 +66,23 @@ export function BetHistory({
   }
 
   return (
-    <div className="flex flex-col gap-2 p-4">
+    <div className="flex flex-col gap-3 p-5">
       <div className="flex items-center justify-between">
-        <h2 className="text-sm font-medium text-slate-300">Bet History</h2>
+        <h2 className="text-xs font-medium uppercase tracking-wide text-slate-500">
+          Bet History
+        </h2>
         <div className="flex gap-2">
           <button
             type="button"
             onClick={() => setModalOpen(true)}
-            className="rounded-md bg-slate-800 px-2 py-1 text-xs"
+            className={`px-2.5 py-1 text-xs ${secondaryButtonClass}`}
           >
             + Sport/League
           </button>
           <button
             type="button"
             onClick={() => setExpanded(false)}
-            className="rounded-md bg-slate-800 px-2 py-1 text-xs"
+            className={`px-2.5 py-1 text-xs ${secondaryButtonClass}`}
           >
             Minimize
           </button>

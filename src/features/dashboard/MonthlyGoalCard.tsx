@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { calculateProfit } from '../../shared/utils/profit'
 import { filterSettled } from '../../shared/utils/betFilters'
+import { cardClass, focusRing, inputClass, primaryButtonClass, secondaryButtonClass } from '../../shared/styles'
 import type { Bet } from '../../shared/types/bet'
 import { updateMonthlyGoal, useMonthlyGoal } from './api'
 
@@ -51,18 +52,22 @@ export function MonthlyGoalCard({ userId, bets }: { userId: string; bets: Bet[] 
 
   if (loading) {
     return (
-      <div className="flex-1 rounded-md border border-slate-800 p-4 text-sm text-slate-500">
-        Loading…
-      </div>
+      <div className={`flex-1 p-5 text-sm text-slate-500 ${cardClass}`}>Loading…</div>
     )
   }
 
   return (
-    <div className="flex flex-1 flex-col gap-2 rounded-md border border-slate-800 p-4">
+    <div className={`flex flex-1 flex-col gap-3 p-5 ${cardClass}`}>
       <div className="flex items-center justify-between">
-        <span className="text-xs text-slate-500">Monthly Goal</span>
+        <span className="text-xs font-medium uppercase tracking-wide text-slate-500">
+          Monthly Goal
+        </span>
         {!editing && (
-          <button type="button" onClick={startEditing} className="text-xs text-slate-400">
+          <button
+            type="button"
+            onClick={startEditing}
+            className={`rounded px-1 text-xs text-slate-400 transition-colors hover:text-slate-200 ${focusRing}`}
+          >
             Edit
           </button>
         )}
@@ -76,7 +81,7 @@ export function MonthlyGoalCard({ userId, bets }: { userId: string; bets: Bet[] 
             min="0"
             value={input}
             onChange={(e) => setInput(e.target.value)}
-            className="rounded-md border border-slate-700 bg-slate-900 px-2 py-1 text-sm"
+            className={inputClass}
           />
           {error && <p className="text-xs text-red-400">{error}</p>}
           <div className="flex gap-2">
@@ -84,14 +89,14 @@ export function MonthlyGoalCard({ userId, bets }: { userId: string; bets: Bet[] 
               type="button"
               onClick={() => void handleSave()}
               disabled={saving}
-              className="flex-1 rounded-md bg-emerald-600 py-1 text-xs disabled:opacity-50"
+              className={`flex-1 py-1.5 text-xs ${primaryButtonClass}`}
             >
               {saving ? 'Saving…' : 'Save'}
             </button>
             <button
               type="button"
               onClick={() => setEditing(false)}
-              className="flex-1 rounded-md bg-slate-800 py-1 text-xs"
+              className={`flex-1 py-1.5 text-xs ${secondaryButtonClass}`}
             >
               Cancel
             </button>
@@ -99,11 +104,14 @@ export function MonthlyGoalCard({ userId, bets }: { userId: string; bets: Bet[] 
         </div>
       ) : (
         <>
-          <span className="text-2xl font-semibold">
-            {monthProfit.toFixed(2)} / {goal.toFixed(2)}
+          <span className="text-3xl font-semibold">
+            {monthProfit.toFixed(2)} <span className="text-lg text-slate-500">/ {goal.toFixed(2)}</span>
           </span>
-          <div className="h-2 w-full overflow-hidden rounded-full bg-slate-800">
-            <div className="h-full bg-emerald-500" style={{ width: `${progressPct}%` }} />
+          <div className="h-2.5 w-full overflow-hidden rounded-full bg-slate-800">
+            <div
+              className="h-full rounded-full bg-emerald-500 transition-[width]"
+              style={{ width: `${progressPct}%` }}
+            />
           </div>
         </>
       )}

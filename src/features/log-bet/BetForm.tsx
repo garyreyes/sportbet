@@ -1,6 +1,8 @@
 import { useMemo, useState } from 'react'
 import { calculateProfit } from '../../shared/utils/profit'
 import { toLocalDateKey } from '../../shared/utils/date'
+import { STATUS_TEXT_COLOR } from '../../shared/utils/statusColor'
+import { focusRing, inputClass, primaryButtonClass, secondaryButtonClass } from '../../shared/styles'
 import { LegEditor } from './LegEditor'
 import { useDraft } from './useDraft'
 import {
@@ -56,6 +58,13 @@ function fromBet(bet: Bet, sportLeagues: Record<string, string[]>): DraftState {
 }
 
 const STATUSES: BetStatus[] = ['win', 'loss', 'push', 'pending']
+
+const STATUS_SELECTED_CLASS: Record<BetStatus, string> = {
+  win: 'bg-emerald-600 text-white shadow-sm shadow-emerald-950/40',
+  loss: 'bg-red-600 text-white shadow-sm shadow-red-950/40',
+  push: 'bg-blue-600 text-white shadow-sm shadow-blue-950/40',
+  pending: 'bg-slate-600 text-white shadow-sm shadow-black/30',
+}
 
 interface BetFormProps {
   userId: string
@@ -136,13 +145,13 @@ export function BetForm({ userId, sportLeagues: baseSportLeagues, initialBet, on
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4 p-4">
+    <form onSubmit={handleSubmit} className="flex flex-col gap-5 p-5">
       <div className="flex gap-2">
         <button
           type="button"
           onClick={() => update({ mode: 'single' })}
-          className={`flex-1 rounded-md py-2 text-sm ${
-            draft.mode === 'single' ? 'bg-emerald-600' : 'bg-slate-800'
+          className={`flex-1 py-2 text-sm ${
+            draft.mode === 'single' ? primaryButtonClass : secondaryButtonClass
           }`}
         >
           Single
@@ -150,59 +159,74 @@ export function BetForm({ userId, sportLeagues: baseSportLeagues, initialBet, on
         <button
           type="button"
           onClick={() => update({ mode: 'parlay' })}
-          className={`flex-1 rounded-md py-2 text-sm ${
-            draft.mode === 'parlay' ? 'bg-emerald-600' : 'bg-slate-800'
+          className={`flex-1 py-2 text-sm ${
+            draft.mode === 'parlay' ? primaryButtonClass : secondaryButtonClass
           }`}
         >
           Parlay
         </button>
       </div>
 
-      <label className="flex flex-col gap-1 text-sm">
-        Date
+      <label className="flex flex-col gap-1.5 text-sm">
+        <span className="text-xs font-medium uppercase tracking-wide text-slate-500">Date</span>
         <input
           type="date"
           value={draft.date}
           onChange={(e) => update({ date: e.target.value })}
-          className="rounded-md border border-slate-700 bg-slate-900 px-2 py-1"
+          className={inputClass}
         />
       </label>
 
       {draft.mode === 'single' ? (
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-3">
           <div className="flex gap-2">
-            <select
-              value={draft.sport}
-              onChange={(e) =>
-                update({ sport: e.target.value, league: sportLeagues[e.target.value][0] })
-              }
-              className="flex-1 rounded-md border border-slate-700 bg-slate-900 px-2 py-1 text-sm"
-            >
-              {sports.map((sport) => (
-                <option key={sport} value={sport}>
-                  {sport}
-                </option>
-              ))}
-            </select>
-            <select
-              value={draft.league}
-              onChange={(e) => update({ league: e.target.value })}
-              className="flex-1 rounded-md border border-slate-700 bg-slate-900 px-2 py-1 text-sm"
-            >
-              {sportLeagues[draft.sport].map((league) => (
-                <option key={league} value={league}>
-                  {league}
-                </option>
-              ))}
-            </select>
+            <label className="flex flex-1 flex-col gap-1.5 text-sm">
+              <span className="text-xs font-medium uppercase tracking-wide text-slate-500">
+                Sport
+              </span>
+              <select
+                value={draft.sport}
+                onChange={(e) =>
+                  update({ sport: e.target.value, league: sportLeagues[e.target.value][0] })
+                }
+                className={inputClass}
+              >
+                {sports.map((sport) => (
+                  <option key={sport} value={sport}>
+                    {sport}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <label className="flex flex-1 flex-col gap-1.5 text-sm">
+              <span className="text-xs font-medium uppercase tracking-wide text-slate-500">
+                League
+              </span>
+              <select
+                value={draft.league}
+                onChange={(e) => update({ league: e.target.value })}
+                className={inputClass}
+              >
+                {sportLeagues[draft.sport].map((league) => (
+                  <option key={league} value={league}>
+                    {league}
+                  </option>
+                ))}
+              </select>
+            </label>
           </div>
-          <input
-            type="text"
-            value={draft.pick}
-            onChange={(e) => update({ pick: e.target.value })}
-            placeholder="Pick (optional)"
-            className="rounded-md border border-slate-700 bg-slate-900 px-2 py-1 text-sm"
-          />
+          <label className="flex flex-col gap-1.5 text-sm">
+            <span className="text-xs font-medium uppercase tracking-wide text-slate-500">
+              Pick
+            </span>
+            <input
+              type="text"
+              value={draft.pick}
+              onChange={(e) => update({ pick: e.target.value })}
+              placeholder="Optional"
+              className={inputClass}
+            />
+          </label>
         </div>
       ) : (
         <LegEditor
@@ -215,33 +239,37 @@ export function BetForm({ userId, sportLeagues: baseSportLeagues, initialBet, on
       )}
 
       <div className="flex gap-2">
-        <label className="flex flex-1 flex-col gap-1 text-sm">
-          Odds (decimal)
+        <label className="flex flex-1 flex-col gap-1.5 text-sm">
+          <span className="text-xs font-medium uppercase tracking-wide text-slate-500">
+            Odds (decimal)
+          </span>
           <input
             type="number"
             step="0.01"
             min="0.01"
             value={draft.odds}
             onChange={(e) => update({ odds: e.target.value })}
-            className="rounded-md border border-slate-700 bg-slate-900 px-2 py-1"
+            className={inputClass}
           />
         </label>
-        <label className="flex flex-1 flex-col gap-1 text-sm">
-          Stake
+        <label className="flex flex-1 flex-col gap-1.5 text-sm">
+          <span className="text-xs font-medium uppercase tracking-wide text-slate-500">
+            Stake
+          </span>
           <input
             type="number"
             step="0.01"
             min="0.01"
             value={draft.stake}
             onChange={(e) => update({ stake: e.target.value })}
-            className="rounded-md border border-slate-700 bg-slate-900 px-2 py-1"
+            className={inputClass}
           />
         </label>
       </div>
 
       <p className="text-sm text-slate-400">
         {profitLabel}:{' '}
-        <span className={projectedProfit >= 0 ? 'text-emerald-400' : 'text-red-400'}>
+        <span className={`font-semibold ${projectedProfit >= 0 ? 'text-emerald-400' : 'text-red-400'}`}>
           {projectedProfit.toFixed(2)}
         </span>
       </p>
@@ -252,8 +280,10 @@ export function BetForm({ userId, sportLeagues: baseSportLeagues, initialBet, on
             key={status}
             type="button"
             onClick={() => update({ status })}
-            className={`flex-1 rounded-md py-2 text-xs capitalize ${
-              draft.status === status ? 'bg-emerald-600' : 'bg-slate-800'
+            className={`flex-1 rounded-lg py-2 text-xs font-medium capitalize transition-colors ${focusRing} ${
+              draft.status === status
+                ? STATUS_SELECTED_CLASS[status]
+                : `bg-slate-800 hover:bg-slate-700 ${STATUS_TEXT_COLOR[status]}`
             }`}
           >
             {status}
@@ -263,12 +293,8 @@ export function BetForm({ userId, sportLeagues: baseSportLeagues, initialBet, on
 
       {error && <p className="text-sm text-red-400">{error}</p>}
 
-      <button
-        type="submit"
-        disabled={saving}
-        className="rounded-md bg-emerald-600 py-2 font-medium disabled:opacity-50"
-      >
-        {saving ? 'Saving…' : 'Save bet'}
+      <button type="submit" disabled={saving} className={`py-2.5 font-medium ${primaryButtonClass}`}>
+        {saving ? 'Saving…' : initialBet ? 'Update bet' : 'Save bet'}
       </button>
     </form>
   )
