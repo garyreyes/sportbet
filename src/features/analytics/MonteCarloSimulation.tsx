@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { ChartTooltip } from '../../shared/components/ChartTooltip'
 import { TimeRangeTabs } from '../../shared/components/TimeRangeTabs'
@@ -20,7 +20,15 @@ const FILTER_LABEL: Record<MonteCarloFilter, string> = {
 export function MonteCarloSimulation({ bets }: { bets: Bet[] }) {
   const [range, setRange] = useState<TimeRange>(TIME_RANGES[4])
   const [filter, setFilter] = useState<MonteCarloFilter>('both')
+  const [sliderValue, setSliderValue] = useState(20)
   const [legCount, setLegCount] = useState(20)
+
+  // Decouple the slider's visual position from the expensive recompute (500 trials +
+  // chart re-render) — committing on every drag tick made the slider feel laggy.
+  useEffect(() => {
+    const timer = setTimeout(() => setLegCount(sliderValue), 100)
+    return () => clearTimeout(timer)
+  }, [sliderValue])
 
   const rangedBets = useMemo(() => filterByRange(bets, range.daysBack), [bets, range])
   const result = useMemo(
@@ -31,11 +39,16 @@ export function MonteCarloSimulation({ bets }: { bets: Bet[] }) {
 
   return (
     <div className={`flex flex-col gap-4 p-5 ${cardClass}`}>
-      <h2 className="text-xs font-medium uppercase tracking-wide text-slate-500">
-        Monte Carlo Simulation
-      </h2>
+      <div>
+        <h2 className="text-xs font-medium uppercase tracking-wide text-slate-500">
+          Monte Carlo Simulation
+        </h2>
+        <p className="text-[11px] text-slate-500">
+          Independent range — not linked to the tabs above
+        </p>
+      </div>
 
-      <TimeRangeTabs value={range} onChange={setRange} />
+      <TimeRangeTabs value={range} onChange={setRange} onSurface />
 
       <div className="flex gap-1.5">
         {FILTERS.map((f) => (
@@ -56,14 +69,14 @@ export function MonteCarloSimulation({ bets }: { bets: Bet[] }) {
 
       <label className="flex flex-col gap-1.5 text-sm">
         <span className="text-xs font-medium uppercase tracking-wide text-slate-500">
-          Simulated bets per trial: {legCount}
+          Simulated bets per trial: {sliderValue}
         </span>
         <input
           type="range"
           min={1}
           max={100}
-          value={legCount}
-          onChange={(e) => setLegCount(Number(e.target.value))}
+          value={sliderValue}
+          onChange={(e) => setSliderValue(Number(e.target.value))}
           className={`accent-emerald-500 ${focusRingOnSurface}`}
         />
       </label>

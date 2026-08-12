@@ -192,6 +192,21 @@ item below.
       live — the panel sits far down the page, so scrolling to the top
       tabs to change range was annoying enough to warrant a dedicated
       one, decoupled from the page-level range.
+- [x] **Impeccable critique + polish (5a–5d)** — done. Dual-agent
+      critique scored ~21/40, two P0s fixed: `TimeRangeTabs` gained an
+      `onSurface` prop so its focus ring matches the surface it's on
+      (Monte Carlo's card was the first reuse inside a card — a
+      regression of the exact bug Phase 3's critique already fixed
+      once); Monte Carlo's independent time-range control now carries a
+      visible disclosure caption so its numbers can't be misread as
+      reflecting the page's shared range. Also fixed two live-reported
+      bugs alongside: Monte Carlo's bet-count slider debounced (100ms)
+      so dragging no longer recomputes 500 trials per tick; app-wide
+      fluid root `font-size` via `clamp()` so text scales on narrow
+      viewports instead of staying fixed. Findings logged in
+      `.impeccable/critique/2026-08-12T14-29-53Z__src-features-analytics.md`.
+      Full Phase 5 critique (including 5e) still to come once AI Coach
+      ships.
 - [ ] **5e. AI Coach Panel** — not started. Ranked insight list, tuned
       thresholds (min 3 decisive bets, ≥15pp gap, ≥3-bet streaks).
 - [ ] **Impeccable critique + polish (Phase 5)** — not started. Run once

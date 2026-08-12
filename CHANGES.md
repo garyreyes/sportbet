@@ -1,5 +1,24 @@
 ## Unreleased
 
+### 2026-08-12 — Analytics: Phase 5 critique fixes + Monte Carlo polish
+Dual-agent Impeccable critique of the Analytics tab (5a–5d together)
+scored ~21/40 with two P0s, both fixed: `TimeRangeTabs` gained a
+surface-aware `onSurface` prop so its focus ring matches the card it
+sits in instead of the page-level ring (a regression of the exact bug
+Phase 3's critique had already fixed once — Monte Carlo's card was the
+first place the shared tabs got reused inside a card); Monte Carlo's
+independently-scoped time range (added at the end of 5d) now carries a
+visible "Independent range — not linked to the tabs above" caption, so
+its numbers can't be misread as reflecting the page's shared range.
+Also fixed two live-reported bugs in the same pass: the bet-count
+slider felt laggy because every drag tick synchronously recomputed 500
+bootstrap trials and re-rendered the histogram — split into an
+instant-updating display value and a 100ms-debounced value that
+actually drives the simulation; and text no longer scaled on narrow
+viewports — root `font-size` is now a `clamp()` fluid value, which
+Tailwind's rem-based `text-*` utilities pick up automatically across
+the whole app.
+
 ### 2026-08-12 — Analytics: Monte Carlo Simulation (Phase 5d)
 Bootstrap-resampling Monte Carlo panel: 500 trials drawing with
 replacement from real historical settled-bet profits, a 5-bet minimum

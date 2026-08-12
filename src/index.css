@@ -1,1 +1,8 @@
 @import "tailwindcss";
+
+/* Fluid base font size — Tailwind's text-* utilities are rem-based, so
+   scaling the root size here makes all text shrink/grow with the
+   viewport instead of staying fixed on narrow screens. */
+html {
+  font-size: clamp(14px, 2.5vw + 8px, 16px);
+}
