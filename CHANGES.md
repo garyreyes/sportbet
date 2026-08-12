@@ -1,5 +1,15 @@
 ## Unreleased
 
+### 2026-08-13 — Groups: Privacy Toggles (Phase 6d)
+Final Groups sub-phase. One card, five toggles controlling what
+groupmates can see on leaderboards (Overall/Past 30 Days/Past 7
+Days/Today's P&L, Win Rate) — each saves immediately on flip with an
+optimistic update that reverts if the save fails. No schema change;
+`get_group_leaderboard` already read these columns server-side. Adds
+the app's first toggle-switch control (`shared/components/ToggleRow.tsx`),
+placed in `shared/` for Settings to reuse later. Phase 6 (Groups) is
+now complete.
+
 ### 2026-08-13 — Groups: single group-detail view + createGroup RLS fix
 Restructured the Groups page after live feedback: 6b's stacked
 per-group card list and 6c's separately-switchable leaderboard

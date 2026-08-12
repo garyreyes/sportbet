@@ -329,8 +329,19 @@ item below.
       regression). Full incident writeup, including how to spot this
       class of bug faster next time, at
       `docs/incidents/2026-08-13-group-create-rls-returning.md`.
-- [ ] **6d. Privacy Toggles** — not started. Per-stat visibility
-      (overall P&L, overall win rate, week/month/today).
+- [x] **6d. Privacy Toggles** — done. One card, five toggle switches
+      (Overall/Past 30 Days/Past 7 Days/Today's P&L, Win Rate), each
+      saving immediately on flip (optimistic update, reverts on save
+      failure) rather than a Save/Cancel step, since a boolean flip is
+      low-risk unlike the rename text field. No schema change —
+      `profiles`'s five `hide_*` columns and `profiles_update_self`
+      already existed and `get_group_leaderboard` already reads them
+      server-side. New shared `shared/components/ToggleRow.tsx` — the
+      first toggle-switch control in the rebuild, placed in `shared/`
+      since Settings (Phase 7) will need the same control for other
+      boolean prefs. Placed above the group dropdown in `GroupsPage.tsx`
+      since it's a user-level setting, not scoped to one group. **Phase
+      6 (Groups) is complete.**
 - [ ] **Impeccable critique + polish (Phase 6)** — not started.
 
 ## Phase 7 — Settings

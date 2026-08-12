@@ -1,5 +1,17 @@
+import { useEffect, useState } from 'react'
 import { supabase } from '../../lib/supabaseClient'
-import type { Group, GroupPreview, GroupWithMembers, LeaderboardRow } from './types'
+import type { Group, GroupPreview, GroupWithMembers, LeaderboardRow, PrivacySettings } from './types'
+
+const PRIVACY_COLUMNS =
+  'hide_overall_pnl, hide_week_pnl, hide_month_pnl, hide_today_pnl, hide_win_rate'
+
+const DEFAULT_PRIVACY: PrivacySettings = {
+  hide_overall_pnl: false,
+  hide_week_pnl: false,
+  hide_month_pnl: false,
+  hide_today_pnl: false,
+  hide_win_rate: false,
+}
 
 /** Owner is added to group_members by the handle_new_group trigger — no client insert needed. */
 export async function createGroup(userId: string, name: string): Promise<Group> {
@@ -143,4 +155,50 @@ export async function getGroupLeaderboard(groupId: string): Promise<LeaderboardR
   }
 
   return data
+}
+
+export function useMyPrivacySettings(userId: string) {
+  const [settings, setSettings] = useState<PrivacySettings>(DEFAULT_PRIVACY)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    let cancelled = false
+
+    supabase
+      .from('profiles')
+      .select(PRIVACY_COLUMNS)
+      .eq('id', userId)
+      .single()
+      .then(({ data, error }) => {
+        if (cancelled) return
+        if (error) {
+          console.error('useMyPrivacySettings fetch failed:', error)
+        } else if (data) {
+          setSettings(data)
+        }
+        setLoading(false)
+      })
+
+    return () => {
+      cancelled = true
+    }
+  }, [userId])
+
+  return { settings, setSettings, loading }
+}
+
+export async function updatePrivacySetting(
+  userId: string,
+  field: keyof PrivacySettings,
+  value: boolean,
+): Promise<void> {
+  const { error } = await supabase
+    .from('profiles')
+    .update({ [field]: value })
+    .eq('id', userId)
+
+  if (error) {
+    console.error('updatePrivacySetting failed:', error)
+    throw new Error('Could not save that setting. Please try again.')
+  }
 }
