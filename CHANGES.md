@@ -1,5 +1,23 @@
 ## Unreleased
 
+### 2026-08-12 — Analytics: full Phase 5 critique + polish (5a-5e)
+Dual-agent Impeccable critique of the complete Analytics tab (all five
+sub-phases together, the first time they've been judged as one cohesive
+surface) scored 26/40, up from 21/40 on the earlier partial pass. Fixed
+all five findings: profit figures on the four win-rate panels (Category,
+Odds Range, Leg Breakdown, Bet Type) now read "P/L +12.34" instead of a
+bare signed number with no unit, since no currency-formatting utility
+exists yet (real fix lands with Phase 7a's currency picker — this just
+labels the figure honestly in the meantime); Parlay Sport Composition
+gained a caption explaining why it has no win-rate/profit figure, unlike
+every panel above it; the page now groups its nine data panels under
+"Breakdowns" / "Trends" / "Simulation" section labels instead of reading
+as one flat stack of same-weight cards; a new shared `ScopeBadge`
+component (amber pill, dot + text) replaces the plain caption text on AI
+Coach's and Monte Carlo's "not linked to the tabs" disclosures, making
+their independent time scope visually obvious rather than something a
+user has to read 11px text to notice. Phase 5 (Analytics) is complete.
+
 ### 2026-08-12 — Analytics: AI Coach Panel + profit on win-rate panels (Phase 5e)
 Final Analytics sub-phase. AI Coach Panel: ranked, plain-language insight
 list (streak, best/worst league win-rate gap, best/worst odds-bucket

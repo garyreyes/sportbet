@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
 import { ChartTooltip } from '../../shared/components/ChartTooltip'
+import { ScopeBadge } from '../../shared/components/ScopeBadge'
 import { TimeRangeTabs } from '../../shared/components/TimeRangeTabs'
 import { cardClass, focusRingOnSurface } from '../../shared/styles'
 import { CHART_ACCENT, CHART_AXIS_COLOR, CHART_GRID_COLOR } from '../../shared/utils/chartTheme'
@@ -39,13 +40,11 @@ export function MonteCarloSimulation({ bets }: { bets: Bet[] }) {
 
   return (
     <div className={`flex flex-col gap-4 p-5 ${cardClass}`}>
-      <div>
+      <div className="flex flex-col gap-1.5">
         <h2 className="text-xs font-medium uppercase tracking-wide text-slate-500">
           Monte Carlo Simulation
         </h2>
-        <p className="text-[11px] text-slate-500">
-          Independent range — not linked to the tabs above
-        </p>
+        <ScopeBadge>Independent range</ScopeBadge>
       </div>
 
       <TimeRangeTabs value={range} onChange={setRange} onSurface />

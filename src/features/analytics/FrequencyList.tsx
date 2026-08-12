@@ -4,14 +4,19 @@ import type { SportFrequency } from './parlayComposition'
 interface FrequencyListProps {
   title: string
   rows: SportFrequency[]
+  /** Clarifies why this list has no win-rate/profit figure, unlike the panels above it. */
+  caption?: string
 }
 
-export function FrequencyList({ title, rows }: FrequencyListProps) {
+export function FrequencyList({ title, rows, caption }: FrequencyListProps) {
   const max = Math.max(1, ...rows.map((row) => row.count))
 
   return (
     <div className={`flex flex-col gap-3 p-5 ${cardClass}`}>
-      <h2 className="text-xs font-medium uppercase tracking-wide text-slate-500">{title}</h2>
+      <div>
+        <h2 className="text-xs font-medium uppercase tracking-wide text-slate-500">{title}</h2>
+        {caption && <p className="text-[11px] text-slate-500">{caption}</p>}
+      </div>
 
       {rows.length === 0 ? (
         <p className="text-sm text-slate-500">No parlay legs in this range.</p>

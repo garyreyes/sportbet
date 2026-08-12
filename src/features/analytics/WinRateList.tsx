@@ -37,7 +37,7 @@ export function WinRateRows({
             <span
               className={`text-xs font-normal ${row.profit >= 0 ? 'text-emerald-400' : 'text-red-400'}`}
             >
-              · {row.profit >= 0 ? '+' : ''}
+              · P/L {row.profit >= 0 ? '+' : ''}
               {row.profit.toFixed(2)}
             </span>
           </span>
