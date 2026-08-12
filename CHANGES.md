@@ -1,5 +1,19 @@
 ## Unreleased
 
+### 2026-08-12 — Calendar (Phase 4a)
+Calendar tab is live: a month grid with day cells colored by that day's
+net settled profit (sign-based, matching the Dashboard chart's Daily
+view treatment), month back/forward navigation, a running calendar-month
+total in the header, and a day detail panel (read-only bet list,
+side-by-side on desktop / stacked on mobile, minimizable) that opens on
+tap. Third feature to consume the shared `useBetsContext()`. Extracted
+`monthPrefix()` out of `MonthlyGoalCard` into `shared/utils/date.ts`
+since Calendar needed the identical calendar-month logic — now both
+screens compute "this month" the same way, so their totals are
+guaranteed to agree rather than risk silently drifting apart. Verified
+end-to-end against the real account, including cross-checking Calendar's
+month total against Dashboard's Monthly Goal figure.
+
 ### 2026-08-12 — Phase 3 design critique + fixes
 Ran the Phase 3 Impeccable checkpoint on Dashboard, scored 24/40. Fixed a
 real bug the recent depth pass introduced: the shared `focusRing` token

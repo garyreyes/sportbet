@@ -121,9 +121,16 @@ item below.
 
 ## Phase 4 — Calendar
 
-- [ ] **4a. Month grid + day detail** — not started. P/L-colored day cells,
-      month nav, running month total, day detail panel (side-by-side
-      desktop / stacked mobile, minimizable).
+- [x] **4a. Month grid + day detail** — done. P/L-colored day cells
+      (sign-based, matching `ProfitChart`'s Daily view — not
+      magnitude-scaled), month nav, running calendar-month total in the
+      header, read-only day detail panel (side-by-side desktop / stacked
+      mobile, minimizable). Third consumer of `useBetsContext()`.
+      Extracted `monthPrefix()` to `shared/utils/date.ts` (was duplicated
+      inline in `MonthlyGoalCard`) since Calendar needed the identical
+      calendar-month logic — now the one shared source both use, so the
+      Calendar month total and Dashboard's Monthly Goal figure are
+      guaranteed to agree for the same month.
 - [ ] **Impeccable critique + polish (Phase 4)** — not started.
 
 ## Phase 5 — Analytics
