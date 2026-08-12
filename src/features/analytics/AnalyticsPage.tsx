@@ -2,8 +2,11 @@ import { useState } from 'react'
 import { useBetsContext } from '../../shared/bets/useBetsContext'
 import { TimeRangeTabs } from '../../shared/components/TimeRangeTabs'
 import { TIME_RANGES, filterByRange, type TimeRange } from '../../shared/utils/timeRanges'
+import { BetTypeComparison } from './BetTypeComparison'
 import { CategoryWinRates } from './CategoryWinRates'
+import { LegBreakdown } from './LegBreakdown'
 import { OddsRangeBreakdown } from './OddsRangeBreakdown'
+import { ParlaySportComposition } from './ParlaySportComposition'
 
 export function AnalyticsPage() {
   const { bets, loading, error } = useBetsContext()
@@ -19,6 +22,9 @@ export function AnalyticsPage() {
       <TimeRangeTabs value={range} onChange={setRange} />
       <CategoryWinRates bets={rangedBets} />
       <OddsRangeBreakdown bets={rangedBets} />
+      <LegBreakdown bets={rangedBets} />
+      <BetTypeComparison bets={rangedBets} />
+      <ParlaySportComposition bets={rangedBets} />
     </div>
   )
 }

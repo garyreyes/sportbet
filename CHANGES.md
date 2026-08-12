@@ -1,5 +1,20 @@
 ## Unreleased
 
+### 2026-08-12 — Analytics: Leg Breakdown, Bet Type Comparison, Parlay Sport Composition (Phase 5b)
+Three more Analytics panels. Leg Breakdown groups decisive parlays by
+leg count (2/3/4/5/6+, folding the long tail like the odds buckets do)
+as a whole-parlay-outcome win rate, with a collapse toggle since it's
+the one panel the UI inventory actually describes as collapsible. Bet
+Type Comparison is a simple Straight-vs-Parlay win rate reusing the
+existing `WinRateList` shape. Parlay Sport Composition counts how often
+each sport appears across all parlay legs — a frequency count rather
+than a win rate, so it got its own `FrequencyList` display component;
+this is the one place per-leg data gets aggregated at all, since the
+documented rule only restricts attributing a parlay's *outcome* to each
+leg's sport, not counting composition. Verified against the real
+account: leg buckets match actual parlay sizes, Straight/Parlay totals
+sum correctly, and sport counts match logged parlay legs.
+
 ### 2026-08-12 — Analytics: Category Win Rates + Odds Range Breakdown (Phase 5a)
 Analytics tab is live with its shared time-range tabs and two panels:
 Category Win Rates (by league, with all parlays deliberately collapsed
